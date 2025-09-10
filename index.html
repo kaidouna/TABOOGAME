@@ -3,16 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaboGame - Multiplayer Word Game</title>
+    <title>TaboGame - Word Game</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Firebase App (core) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <!-- Firebase Realtime Database -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        
         * {
             margin: 0;
             padding: 0;
@@ -42,75 +36,6 @@
             backdrop-filter: blur(10px);
         }
         
-        /* Offline Role Selection Overlay */
-        #offlineRoleOverlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.85);
-            color: white;
-            display: none; /* Changed from flex to none */
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 1.5rem;
-            z-index: 99999;
-        }
-        
-        #offlineRoleOverlay h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
-        }
-        
-        #offlineRoleOverlay p {
-            font-size: 1.2rem;
-            max-width: 500px;
-            text-align: center;
-            margin-bottom: 1rem;
-            line-height: 1.6;
-        }
-        
-        #offlineRoleOverlay .role-buttons {
-            display: flex;
-            gap: 1.5rem;
-            margin-top: 1rem;
-        }
-        
-        #offlineRoleOverlay button {
-            padding: 1rem 2rem;
-            font-size: 1.2rem;
-            cursor: pointer;
-            border: none;
-            border-radius: 16px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            min-width: 180px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        #offlineRoleOverlay .describer-btn {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-        }
-        
-        #offlineRoleOverlay .describer-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(245, 87, 108, 0.4);
-        }
-        
-        #offlineRoleOverlay .guesser-btn {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            color: white;
-        }
-        
-        #offlineRoleOverlay .guesser-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 242, 254, 0.4);
-        }
-        
         header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -120,20 +45,11 @@
             overflow: hidden;
         }
         
-        header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-            animation: pulse 15s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         
         .settings-icon {
@@ -156,15 +72,6 @@
         .settings-icon:hover {
             transform: rotate(45deg);
             background: rgba(255, 255, 255, 0.3);
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            position: relative;
-            z-index: 5;
         }
         
         .setup-screen {
@@ -207,48 +114,6 @@
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
         
-        .role-selection {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 40px 0;
-        }
-        
-        .role-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            width: 250px;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-        
-        .role-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-        }
-        
-        .role-card.selected {
-            border: 2px solid #667eea;
-            transform: scale(1.05);
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
-        }
-        
-        .describer-card i {
-            color: #f5576c;
-            font-size: 3rem;
-            margin-bottom: 15px;
-        }
-        
-        .guesser-card i {
-            color: #00f2fe;
-            font-size: 3rem;
-            margin-bottom: 15px;
-        }
-        
         .btn {
             padding: 15px 30px;
             border: none;
@@ -284,16 +149,6 @@
             color: white;
         }
         
-        .btn-warning {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-            color: white;
-        }
-        
-        .btn-small {
-            padding: 10px 20px;
-            font-size: 0.9rem;
-        }
-        
         .game-screen {
             display: none;
             padding: 30px;
@@ -310,459 +165,6 @@
             color: white;
             font-weight: 600;
             box-shadow: 0 10px 25px rgba(102, 126, 234, 0.2);
-        }
-        
-        .timer {
-            font-size: 3rem;
-            font-weight: bold;
-            color: #e53e3e;
-            margin: 25px 0;
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-            padding: 20px 40px;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(252, 182, 159, 0.3);
-        }
-        
-        .describer-view, .guesser-view {
-            display: none;
-        }
-        
-        .words-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin: 30px 0;
-            min-height: 200px;
-        }
-        
-        .word-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 16px;
-            text-align: center;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 90px;
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
-        }
-        
-        .word-card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.3);
-        }
-        
-        .word-card.correct {
-            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
-        }
-        
-        .word-card.incorrect {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-        
-        .input-section {
-            margin: 25px 0;
-            text-align: center;
-        }
-        
-        input {
-            padding: 15px 20px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            width: 350px;
-            outline: none;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-        }
-        
-        input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        
-        .score-display {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #4a5568;
-            margin: 25px 0;
-            text-align: center;
-        }
-        
-        .instructions {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 25px;
-            border-radius: 20px;
-            margin: 25px 0;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
-        }
-        
-        .role-switch-notice {
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-            border: 1px solid #ffeaa7;
-            color: #856404;
-            padding: 20px;
-            border-radius: 16px;
-            margin: 20px 0;
-            text-align: center;
-            box-shadow: 0 8px 20px rgba(252, 182, 159, 0.3);
-        }
-        
-        /* Settings Modal */
-        .settings-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .settings-content {
-            background: white;
-            padding: 40px;
-            border-radius: 24px;
-            width: 90%;
-            max-width: 600px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        .settings-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 20px;
-        }
-        
-        .settings-header h2 {
-            color: #4a5568;
-            font-size: 1.8rem;
-            font-weight: 600;
-        }
-        
-        .close-settings {
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #a0aec0;
-            transition: color 0.3s ease;
-        }
-        
-        .close-settings:hover {
-            color: #4a5568;
-        }
-        
-        .setting-item {
-            margin-bottom: 30px;
-        }
-        
-        .setting-item label {
-            display: block;
-            margin-bottom: 12px;
-            font-weight: 600;
-            color: #4a5568;
-        }
-        
-        .setting-item input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        
-        .setting-item input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        
-        .setting-item .value-display {
-            margin-top: 8px;
-            font-size: 0.9rem;
-            color: #718096;
-        }
-        
-        .wordlist-section {
-            border: 2px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 25px;
-            margin-top: 30px;
-        }
-        
-        .wordlist-section h3 {
-            color: #4a5568;
-            margin-bottom: 20px;
-            text-align: center;
-            font-size: 1.3rem;
-            font-weight: 600;
-        }
-        
-        .wordlist-status {
-            background: #f7fafc;
-            padding: 15px;
-            border-radius: 12px;
-            margin: 15px 0;
-            text-align: center;
-            font-size: 0.9rem;
-            color: #4a5568;
-        }
-        
-        .save-settings {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 15px 25px;
-            border-radius: 12px;
-            font-size: 1rem;
-            cursor: pointer;
-            width: 100%;
-            margin-top: 20px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .save-settings:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-        
-        .notification {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            color: #4a5568;
-            padding: 20px 30px;
-            border-radius: 16px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            display: none;
-            z-index: 1000;
-            font-weight: 500;
-            border-left: 5px solid #48bb78;
-        }
-        
-        .error-notification {
-            border-left-color: #e53e3e;
-        }
-        
-        .warning-notification {
-            border-left-color: #ed8936;
-        }
-        
-        .info-notification {
-            border-left-color: #4299e1;
-        }
-        
-        .hotkey-hint {
-            font-size: 0.9rem;
-            color: #718096;
-            margin-top: 8px;
-        }
-        
-        .game-over-notification {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-            text-align: center;
-            z-index: 1001;
-            display: none;
-            max-width: 500px;
-            width: 90%;
-        }
-        
-        .game-over-notification h2 {
-            color: #4a5568;
-            margin-bottom: 20px;
-            font-size: 2rem;
-            font-weight: 600;
-        }
-        
-        .game-over-notification p {
-            margin-bottom: 30px;
-            font-size: 1.2rem;
-            color: #718096;
-            line-height: 1.6;
-        }
-        
-        .game-over-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-        }
-        
-        /* Multiplayer specific styles */
-        .mode-selection {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin: 40px 0;
-        }
-        
-        .mode-card {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            width: 250px;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-        
-        .mode-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-        }
-        
-        .mode-card.selected {
-            border: 2px solid #667eea;
-            transform: scale(1.05);
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
-        }
-        
-        .solo-card i {
-            color: #667eea;
-            font-size: 3rem;
-            margin-bottom: 15px;
-        }
-        
-        .multiplayer-card i {
-            color: #9f7aea;
-            font-size: 3rem;
-            margin-bottom: 15px;
-        }
-        
-        .lobby-screen {
-            display: none;
-            padding: 40px;
-            text-align: center;
-        }
-        
-        .lobby-info {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 30px;
-            border-radius: 20px;
-            margin: 30px 0;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-        }
-        
-        .player-list {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            margin: 30px 0;
-        }
-        
-        .player-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 16px;
-            text-align: center;
-            font-weight: 600;
-            min-width: 140px;
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
-        }
-        
-        .player-card.describer {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-        }
-        
-        .player-card.guesser {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-        
-        .game-id-display {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #4a5568;
-            margin: 20px 0;
-            padding: 15px 25px;
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-            border-radius: 16px;
-            display: inline-block;
-            box-shadow: 0 8px 20px rgba(252, 182, 159, 0.3);
-        }
-        
-        .copy-btn {
-            background: linear-gradient(135deg, #9f7aea 0%, #667eea 100%);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-left: 15px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .copy-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 15px rgba(159, 122, 234, 0.3);
-        }
-        
-        .connection-status {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-        
-        .connected {
-            background: #48bb78;
-            box-shadow: 0 0 10px rgba(72, 187, 120, 0.5);
-        }
-        
-        .disconnected {
-            background: #e53e3e;
-            box-shadow: 0 0 10px rgba(229, 62, 62, 0.5);
-        }
-        
-        .multiplayer-controls {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 30px;
-        }
-        
-        .global-notification {
-            position: fixed;
-            top: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: white;
-            color: #4a5568;
-            padding: 20px 30px;
-            border-radius: 16px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            display: none;
-            z-index: 1002;
-            max-width: 80%;
-            text-align: center;
-            font-weight: 500;
-            border-left: 5px solid #4299e1;
         }
         
         /* Word Guess Challenge Styles */
@@ -784,29 +186,14 @@
             overflow: hidden;
         }
         
-        .wgc-header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
-            animation: pulse 15s ease-in-out infinite;
-        }
-        
         .wgc-header h1 {
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 10px;
-            position: relative;
-            z-index: 5;
         }
         
         .wgc-header p {
             opacity: 0.9;
-            position: relative;
-            z-index: 5;
         }
         
         .wgc-content {
@@ -1103,69 +490,11 @@
             color: #4a5568;
         }
         
-        .timer {
-            transition: width 0.1s linear;
-        }
-        
-        .bounce {
-            animation: bounce 0.5s;
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .shake {
-            animation: shake 0.5s;
-        }
-        
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
+        .hidden {
+            display: none !important;
         }
         
         @media (max-width: 768px) {
-            .words-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .role-selection, .mode-selection {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            input {
-                width: 100%;
-            }
-            
-            #offlineRoleOverlay .role-buttons {
-                flex-direction: column;
-                gap: 1rem;
-            }
-            
-            #offlineRoleOverlay h2 {
-                font-size: 2rem;
-            }
-            
-            .game-header {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .game-over-buttons {
-                flex-direction: column;
-            }
-            
-            .multiplayer-controls {
-                flex-direction: column;
-            }
-            
             .wgc-content {
                 padding: 30px 20px;
             }
@@ -1173,42 +502,18 @@
             .wgc-button-group {
                 flex-direction: column;
             }
+            
+            .wgc-header h1 {
+                font-size: 2rem;
+            }
+            
+            .input-group input {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Offline Role Selection Overlay -->
-    <div id="offlineRoleOverlay">
-        <h2>Select Your Role</h2>
-        <p>Choose whether you want to describe words or guess them. You can change this later during the game.</p>
-        <div class="role-buttons">
-            <button class="describer-btn" onclick="setOfflineRole('describer')">
-                <i class="fas fa-microphone-alt fa-2x"></i>
-                Describer
-            </button>
-            <button class="guesser-btn" onclick="setOfflineRole('guesser')">
-                <i class="fas fa-ear-listen fa-2x"></i>
-                Guesser
-            </button>
-        </div>
-        <p class="hotkey-hint">Press Enter to select your role</p>
-    </div>
-    
-    <!-- Game Over Notification -->
-    <div class="game-over-notification" id="game-over-notification">
-        <h2>Game Over!</h2>
-        <p id="game-over-message">Your score: 0 points</p>
-        <div class="game-over-buttons">
-            <button class="btn btn-primary" onclick="startNewGame()">Play Again</button>
-            <button class="btn btn-secondary" onclick="returnToMenu()">Main Menu</button>
-        </div>
-    </div>
-    
-    <!-- Global Notification for role switches -->
-    <div class="global-notification" id="global-notification">
-        <i class="fas fa-info-circle"></i> <span id="global-notification-text">Player switched roles</span>
-    </div>
-    
     <div class="container">
         <header>
             <div class="settings-icon" onclick="openSettings()">
@@ -1217,56 +522,6 @@
             <h1>TABOGAME</h1>
             <p id="game-mode-header">Single Player Word Game</p>
         </header>
-        
-        <!-- Settings Modal -->
-        <div class="settings-modal" id="settings-modal">
-            <div class="settings-content">
-                <div class="settings-header">
-                    <h2>Game Settings</h2>
-                    <div class="close-settings" onclick="closeSettings()">
-                        <i class="fas fa-times"></i>
-                    </div>
-                </div>
-                
-                <div class="setting-item">
-                    <label for="rounds">Number of Rounds</label>
-                    <input type="range" id="rounds" min="1" max="10" value="3" step="1">
-                    <div class="value-display" id="rounds-value">3 rounds</div>
-                </div>
-                
-                <div class="setting-item">
-                    <label for="timer">Timer Duration (seconds)</label>
-                    <input type="range" id="timer" min="30" max="180" value="90" step="10">
-                    <div class="value-display" id="timer-value">90 seconds</div>
-                </div>
-                
-                <div class="setting-item">
-                    <label for="words">Number of Words</label>
-                    <input type="range" id="words" min="5" max="30" value="20" step="5">
-                    <div class="value-display" id="words-value">20 words</div>
-                </div>
-                
-                <!-- Word List Section in Settings -->
-                <div class="wordlist-section">
-                    <h3>Word List Settings</h3>
-                    <div class="wordlist-status" id="wordlist-status">
-                        Using default word list (40 words)
-                    </div>
-                    <div class="input-group">
-                        <input type="file" id="word-file" accept=".txt">
-                        <button class="btn btn-primary btn-small" onclick="loadWordList()">Load Custom Words</button>
-                        <button class="btn btn-secondary btn-small" onclick="useDefaultWords()">Use Default Words</button>
-                    </div>
-                </div>
-                
-                <button class="save-settings" onclick="saveSettings()">Save Settings</button>
-            </div>
-        </div>
-        
-        <!-- Notification -->
-        <div class="notification" id="notification">
-            Settings saved successfully!
-        </div>
         
         <!-- Mode Selection Screen -->
         <div class="setup-screen" id="mode-screen">
@@ -1277,15 +532,7 @@
                     <h3>Single Player</h3>
                     <p>Guess words from descriptions</p>
                 </div>
-                
-                <div class="mode-card multiplayer-card" onclick="selectMode('multiplayer')">
-                    <i class="fas fa-users fa-3x"></i>
-                    <h3>Multiplayer</h3>
-                    <p>Play with friends online</p>
-                </div>
             </div>
-            <p class="hotkey-hint">Press Enter to continue</p>
-            <button class="btn btn-primary" onclick="submitMode()">Continue</button>
         </div>
         
         <!-- Player Name Screen -->
@@ -1300,138 +547,22 @@
             <button class="btn btn-secondary" onclick="switchScreen('mode-screen')">Back</button>
         </div>
         
-        <!-- Multiplayer Lobby Screen -->
-        <div class="lobby-screen" id="lobby-screen">
-            <h2>Multiplayer Lobby</h2>
-            
-            <div class="lobby-info">
-                <h3>Game ID: <span id="game-id-display">Loading...</span></h3>
-                <button class="copy-btn" onclick="copyGameId()"><i class="fas fa-copy"></i> Copy</button>
-                <p>Share this code with your friends so they can join your game</p>
-            </div>
-            
-            <div class="input-group" id="join-section" style="display: none;">
-                <input type="text" id="join-game-id" placeholder="Enter Game ID">
-                <button class="btn btn-primary" onclick="joinGame()">Join Game</button>
-            </div>
-            
-            <h3>Players in Lobby:</h3>
-            <div class="player-list" id="player-list">
-                <!-- Players will be added here dynamically -->
-            </div>
-            
-            <div class="multiplayer-controls" id="host-controls" style="display: none;">
-                <button class="btn btn-primary" onclick="moveToRoleSelection()">Next</button>
-                <button class="btn btn-danger" onclick="leaveGame()">Leave Game</button>
-            </div>
-            
-            <div class="multiplayer-controls" id="guest-controls" style="display: none;">
-                <button class="btn btn-danger" onclick="leaveGame()">Leave Game</button>
-            </div>
-            
-            <div id="waiting-message" style="display: none;">
-                <p>Waiting for host to continue...</p>
-            </div>
-        </div>
-        
-        <!-- Multiplayer Role Selection Screen -->
-        <div class="setup-screen" id="multiplayer-role-screen" style="display: none;">
-            <h2>Select Your Role</h2>
-            <div class="role-selection">
-                <div class="role-card describer-card" onclick="selectMultiplayerRole('describer')">
-                    <i class="fas fa-microphone-alt fa-3x"></i>
-                    <h3>Describer</h3>
-                    <p>See words and describe them</p>
-                </div>
-                
-                <div class="role-card guesser-card" onclick="selectMultiplayerRole('guesser')">
-                    <i class="fas fa-ear-listen fa-3x"></i>
-                    <h3>Guesser</h3>
-                    <p>Listen and guess words</p>
-                </div>
-            </div>
-            <p class="hotkey-hint">Press Enter to continue</p>
-            <button class="btn btn-primary" onclick="submitMultiplayerRole()">Continue</button>
-            <button class="btn btn-secondary" onclick="switchScreen('lobby-screen')">Back</button>
-        </div>
-        
         <!-- Game Screen -->
         <div class="game-screen" id="game-screen">
-            <div class="game-header" id="game-header-multiplayer" style="display: none;">
-                <span id="player-info">Player Name - Role</span>
-                <div>
-                    <button class="btn btn-warning" onclick="switchRole()">Switch Role</button>
-                    <button class="btn btn-danger" onclick="resetGame()">Reset Game</button>
-                </div>
-            </div>
-            
-            <div class="game-header" id="game-header-single" style="display: none;">
+            <div class="game-header" id="game-header-single">
                 <span id="player-info-single">Single Player Mode</span>
                 <div>
                     <button class="btn btn-danger" onclick="resetGame()">Reset Game</button>
                 </div>
             </div>
             
-            <!-- Original Game Interface (Multiplayer Only) -->
-            <div id="original-game-interface" style="display: none;">
-                <div class="timer" id="timer-display">90s</div>
-                
-                <div class="describer-view" id="describer-view">
-                    <h2>Describe words to your team</h2>
-                    <p>Click "Start Game" to begin. Words will appear after you start.</p>
-                    
-                    <div class="words-grid" id="words-grid" style="display: none;">
-                        <!-- Words will be dynamically inserted here -->
-                    </div>
-                    
-                    <div class="action-buttons">
-                        <button class="btn btn-primary" id="start-button" onclick="startGame()">Start Game</button>
-                    </div>
-                </div>
-                
-                <div class="guesser-view" id="guesser-view">
-                    <h2>Listen to your team's descriptions</h2>
-                    <p>Type the word you think is being described</p>
-                    
-                    <div class="input-section">
-                        <input type="text" id="guess-input" placeholder="Type your guess here..." disabled>
-                        <p class="hotkey-hint">Press Enter to submit</p>
-                        <button class="btn btn-primary" onclick="submitGuess()">Submit</button>
-                    </div>
-                    
-                    <div class="score-display">
-                        Score: <span id="score">0</span> points
-                    </div>
-                    
-                    <div class="role-switch-notice" id="role-switch-notice" style="display: none;">
-                        <i class="fas fa-info-circle"></i> You switched roles. The game continues.
-                    </div>
-                    
-                    <div class="words-grid" id="guessed-words">
-                        <!-- Correctly guessed words will appear here -->
-                    </div>
-                </div>
-                
-                <div class="instructions">
-                    <h3>Game Instructions</h3>
-                    <ul>
-                        <li><strong>Describers:</strong> Describe words without saying the word itself</li>
-                        <li><strong>Guessers:</strong> Type the word you think is being described</li>
-                        <li>You have <span id="settings-timer">90</span> seconds to guess as many words as possible</li>
-                        <li>Each correct guess is worth 10 points</li>
-                        <li>Game consists of <span id="settings-rounds">3</span> rounds with <span id="settings-words">20</span> words each</li>
-                        <li>Use the "Switch Role" button to change between Describer and Guesser</li>
-                    </ul>
-                </div>
-            </div>
-            
             <!-- Word Guess Challenge Interface (Single Player Only) -->
-            <div id="word-guess-challenge" style="display: none;">
+            <div id="word-guess-challenge">
                 <div class="word-guess-container">
                     <!-- Header -->
                     <div class="wgc-header">
                         <h1>Word Guess Challenge</h1>
-                        <p>Guess the word in 10 seconds!</p>
+                        <p>Guess the word before time runs out!</p>
                     </div>
                     
                     <!-- Game Area -->
@@ -1447,6 +578,7 @@
                                 Start Game
                             </button>
                             <p class="wgc-file-hint">Select a text file with words and descriptions</p>
+                            <input type="file" id="word-file" accept=".txt" style="display: none;">
                         </div>
                         
                         <!-- Timer -->
@@ -1463,7 +595,7 @@
                         <!-- Description -->
                         <div class="wgc-definition-section">
                             <div class="wgc-definition-label">DESCRIPTION</div>
-                            <p id="definition" class="wgc-definition-text">Please select your words.txt file...</p>
+                            <p id="definition" class="wgc-definition-text">Please select your words.txt file or click 'Start Game' to begin with default words...</p>
                         </div>
                         
                         <!-- Input Area -->
@@ -1480,7 +612,7 @@
                                     <i class="fas fa-lightbulb"></i>
                                     Hint
                                 </button>
-                                <button id="next-word-btn" class="wgc-next-btn" onclick="loadNextWord()">
+                                <button id="next-word-btn" class="wgc-next-btn">
                                     <i class="fas fa-forward"></i>
                                     Next Word
                                 </button>
@@ -1516,37 +648,10 @@
         </div>
     </div>
     <script>
-        // Firebase configuration - Replace with your own config
-        const firebaseConfig = {
-            apiKey: "AIzaSyDU0kEXnU1z5hUJ8P7u4s0MxGvGp3pYV4E",
-            authDomain: "tabogame-online.firebaseapp.com",
-            databaseURL: "https://tabogame-online-default-rtdb.firebaseio.com",
-            projectId: "tabogame-online",
-            storageBucket: "tabogame-online.appspot.com",
-            messagingSenderId: "123456789012",
-            appId: "1:123456789012:web:abcdefghijklmnopqrstuv"
-        };
-        
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        
         // Game state
         let gameActive = false;
-        let timeLeft = 90;
-        let timerInterval = null;
-        let currentWords = [];
-        let guessedWords = [];
-        let score = 0;
         let playerName = '';
-        let playerRole = '';
-        let gameMode = 'solo'; // 'solo' or 'multiplayer'
-        let gameId = null;
-        let isHost = false;
-        let playerId = null;
-        let gameRef = null;
-        let playersRef = null;
-        let lastKnownRoles = {}; // Track last known roles for all players
+        let gameMode = 'solo';
         
         // Word Guess Challenge state
         let wordData = [];
@@ -1555,7 +660,7 @@
         let scoreWGC = 0;
         let streak = 0;
         let timeLeftWGC = 10;
-        let timerWGC;
+        let timerWGC = null;
         let gameActiveWGC = false;
         let hintUsed = false;
         let revealedLetters = [];
@@ -1563,9 +668,7 @@
         
         // Game settings with default values
         let gameSettings = {
-            rounds: 3,
-            timerDuration: 90,
-            wordCount: 20
+            timerDuration: 10
         };
         
         // Default word list
@@ -1589,66 +692,17 @@
             "pencil - A writing instrument with a solid pigment core",
             "paper - Material manufactured in thin sheets from wood pulp",
             "teacher - A person who teaches in a school",
-            "student - A person who is studying at a school or college",
-            "sun - The star at the center of our solar system",
-            "moon - Earth's natural satellite",
-            "star - A luminous point in the night sky",
-            "planet - A celestial body moving in an elliptical orbit",
-            "galaxy - A system of millions or billions of stars",
-            "pizza - An Italian dish with a round base and toppings",
-            "burger - A sandwich consisting of a cooked patty in a bun",
-            "pasta - An Italian dish made from unleavened dough",
-            "salad - A cold dish of various mixtures of raw or cooked vegetables",
-            "soup - A liquid dish made by boiling meat, fish, or vegetables",
-            "car - A road vehicle with four wheels",
-            "bicycle - A human-powered vehicle with two wheels",
-            "train - A connected series of vehicles for rail transport",
-            "airplane - A powered flying vehicle with fixed wings",
-            "ship - A large boat for transporting people or goods by sea",
-            "dog - A domesticated carnivorous mammal",
-            "cat - A small domesticated carnivorous mammal",
-            "bird - A warm-blooded vertebrate with feathers and wings",
-            "fish - A limbless cold-blooded vertebrate with gills",
-            "rabbit - A small burrowing mammal with long ears"
+            "student - A person who is studying at a school or college"
         ];
         
         // DOM elements
-        const nameScreen = document.getElementById('name-screen');
-        const roleScreen = document.getElementById('role-screen');
-        const multiplayerRoleScreen = document.getElementById('multiplayer-role-screen');
-        const gameScreen = document.getElementById('game-screen');
-        const describerView = document.getElementById('describer-view');
-        const guesserView = document.getElementById('guesser-view');
-        const timerEl = document.getElementById('timer-display');
-        const wordsGridEl = document.getElementById('words-grid');
-        const guessedWordsEl = document.getElementById('guessed-words');
-        const scoreEl = document.getElementById('score');
-        const guessInput = document.getElementById('guess-input');
-        const playerInfoEl = document.getElementById('player-info');
-        const startButton = document.getElementById('start-button');
-        const roleSwitchNotice = document.getElementById('role-switch-notice');
-        const settingsModal = document.getElementById('settings-modal');
-        const notification = document.getElementById('notification');
-        const offlineRoleOverlay = document.getElementById('offlineRoleOverlay');
-        const gameOverNotification = document.getElementById('game-over-notification');
-        const gameOverMessage = document.getElementById('game-over-message');
-        const wordlistStatus = document.getElementById('wordlist-status');
         const modeScreen = document.getElementById('mode-screen');
-        const lobbyScreen = document.getElementById('lobby-screen');
-        const gameIdDisplay = document.getElementById('game-id-display');
-        const playerList = document.getElementById('player-list');
-        const hostControls = document.getElementById('host-controls');
-        const guestControls = document.getElementById('guest-controls');
-        const joinSection = document.getElementById('join-section');
-        const waitingMessage = document.getElementById('waiting-message');
-        const joinGameIdInput = document.getElementById('join-game-id');
+        const nameScreen = document.getElementById('name-screen');
+        const gameScreen = document.getElementById('game-screen');
+        const playerNameInput = document.getElementById('player-name');
         const gameModeHeader = document.getElementById('game-mode-header');
-        const globalNotification = document.getElementById('global-notification');
-        const globalNotificationText = document.getElementById('global-notification-text');
         
         // Word Guess Challenge DOM elements
-        const originalGameInterface = document.getElementById('original-game-interface');
-        const wordGuessChallenge = document.getElementById('word-guess-challenge');
         const definitionEl = document.getElementById('definition');
         const guessWgcEl = document.getElementById('guess');
         const submitWgcBtn = document.getElementById('submit');
@@ -1666,6 +720,7 @@
         const inputSection = document.getElementById('input-section');
         const statsSection = document.getElementById('stats-section');
         const startGameBtn = document.getElementById('start-game');
+        const wordFileInput = document.getElementById('word-file');
         
         // Initialize the game when the page loads
         window.onload = function() {
@@ -1675,31 +730,12 @@
             // Set up keyboard shortcuts
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
-                    // Check which screen is currently active
-                    if (document.getElementById('mode-screen').style.display !== 'none') {
-                        submitMode();
-                    } else if (document.getElementById('name-screen').style.display !== 'none') {
+                    if (document.getElementById('name-screen').style.display !== 'none') {
                         submitName();
-                    } else if (document.getElementById('multiplayer-role-screen').style.display !== 'none') {
-                        submitMultiplayerRole();
                     } else if (gameMode === 'solo' && gameActiveWGC) {
-                        // If in solo mode and game is active, submit the guess
                         checkGuess();
                     }
                 }
-            });
-            
-            // Set up settings sliders
-            document.getElementById('rounds').addEventListener('input', function() {
-                document.getElementById('rounds-value').textContent = this.value + ' rounds';
-            });
-            
-            document.getElementById('timer').addEventListener('input', function() {
-                document.getElementById('timer-value').textContent = this.value + ' seconds';
-            });
-            
-            document.getElementById('words').addEventListener('input', function() {
-                document.getElementById('words-value').textContent = this.value + ' words';
             });
             
             // Initialize Word Guess Challenge event listeners
@@ -1707,21 +743,28 @@
             nextWgcBtn.addEventListener('click', loadNextWord);
             hintBtn.addEventListener('click', showHint);
             skipBtn.addEventListener('click', skipWord);
+            nextWordBtn.addEventListener('click', loadNextWord);
             
             // Set up file input for Word Guess Challenge
-            const fileInput = document.getElementById('word-file');
-            fileInput.addEventListener('change', handleFileSelect);
+            wordFileInput.addEventListener('change', handleFileSelect);
             
             // Set up the load file button for Word Guess Challenge
             document.getElementById('load-file').addEventListener('click', () => {
-                fileInput.click();
+                wordFileInput.click();
+            });
+            
+            // Add event listener for Enter key on guess input in single player mode
+            guessWgcEl.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && gameActiveWGC) {
+                    checkGuess();
+                }
             });
         };
         
         // Function to switch between screens
         function switchScreen(screenId) {
             // Hide all screens
-            document.querySelectorAll('.setup-screen, .game-screen, .lobby-screen').forEach(screen => {
+            document.querySelectorAll('.setup-screen, .game-screen').forEach(screen => {
                 screen.style.display = 'none';
             });
             
@@ -1729,132 +772,40 @@
             document.getElementById(screenId).style.display = 'block';
         }
         
-        // Variable to store the selected mode
-        let selectedMode = '';
-        
         // Function to select a game mode
         function selectMode(mode) {
-            selectedMode = mode;
-            
-            // Update the UI to show which mode is selected
-            document.querySelectorAll('.mode-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-            
-            if (mode === 'solo') {
-                document.querySelector('.solo-card').classList.add('selected');
-            } else if (mode === 'multiplayer') {
-                document.querySelector('.multiplayer-card').classList.add('selected');
-            }
+            gameMode = mode;
+            submitMode();
         }
         
         // Function to submit the selected mode and proceed
         function submitMode() {
-            if (!selectedMode) {
-                showNotification('Please select a game mode', 'error');
-                return;
-            }
-            
-            if (selectedMode === 'solo') {
-                switchScreen('name-screen');
-            } else if (selectedMode === 'multiplayer') {
-                switchScreen('name-screen');
-            }
+            switchScreen('name-screen');
         }
         
         // Function to submit the player name
         function submitName() {
-            const nameInput = document.getElementById('player-name');
-            playerName = nameInput.value.trim();
+            playerName = playerNameInput.value.trim();
             
             if (!playerName) {
-                showNotification('Please enter your name', 'error');
+                alert('Please enter your name');
                 return;
             }
             
             // Clear the name input field
-            nameInput.value = '';
+            playerNameInput.value = '';
             
-            if (selectedMode === 'solo') {
-                // For solo mode, go directly to the game screen
+            if (gameMode === 'solo') {
                 startSoloGame();
-            } else if (selectedMode === 'multiplayer') {
-                // For multiplayer mode, go to the lobby screen
-                switchScreen('lobby-screen');
-                setupMultiplayerLobby();
             }
         }
         
         // Function to start the solo game
         function startSoloGame() {
-            gameMode = 'solo';
             switchScreen('game-screen');
-            
-            // Show the Word Guess Challenge interface and hide the original game interface
-            originalGameInterface.style.display = 'none';
-            wordGuessChallenge.style.display = 'block';
-            
-            // Show the single player header
-            document.getElementById('game-header-multiplayer').style.display = 'none';
-            document.getElementById('game-header-single').style.display = 'flex';
             
             // Initialize the Word Guess Challenge game
             initWordGuessChallenge();
-        }
-        
-        // Function to set up the multiplayer lobby
-        function setupMultiplayerLobby() {
-            // This is a placeholder for multiplayer setup
-            // In a real implementation, this would involve Firebase
-            
-            // For now, we'll just show a message that multiplayer is not implemented
-            showNotification('Multiplayer mode is not implemented in this version', 'warning');
-            
-            // Generate a random game ID
-            gameId = Math.random().toString(36).substring(2, 8).toUpperCase();
-            gameIdDisplay.textContent = gameId;
-            
-            // Show the host controls and hide the join section
-            hostControls.style.display = 'flex';
-            joinSection.style.display = 'none';
-            isHost = true;
-            
-            // Add the current player to the player list
-            updatePlayerList();
-        }
-        
-        // Function to update the player list in the lobby
-        function updatePlayerList() {
-            // Clear the player list
-            playerList.innerHTML = '';
-            
-            // Add the current player
-            const playerCard = document.createElement('div');
-            playerCard.className = 'player-card';
-            playerCard.textContent = playerName;
-            playerList.appendChild(playerCard);
-        }
-        
-        // Function to show a notification
-        function showNotification(message, type = 'info') {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.className = 'notification';
-            
-            if (type === 'error') {
-                notification.classList.add('error-notification');
-            } else if (type === 'warning') {
-                notification.classList.add('warning-notification');
-            } else {
-                notification.classList.add('info-notification');
-            }
-            
-            notification.style.display = 'block';
-            
-            // Hide the notification after 3 seconds
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
         }
         
         // Function to initialize the Word Guess Challenge game
@@ -1937,10 +888,10 @@
             
             if (newWordData.length > 0) {
                 wordData = newWordData;
-                showNotification(`Loaded ${wordData.length} words from file`);
+                alert(`Loaded ${wordData.length} words from file`);
                 definitionEl.textContent = "Words loaded! Click 'Start Game' to begin playing!";
             } else {
-                showNotification('No valid words found in the file', 'error');
+                alert('No valid words found in the file');
             }
         }
         
@@ -1967,7 +918,7 @@
             // Display the definition
             definitionEl.textContent = currentWord.definition;
             
-            // Clear the guess input
+            // Clear the guess input - FIX 1: Clear input when loading new word
             guessWgcEl.value = '';
             
             // Hide the feedback and next button
@@ -1975,8 +926,8 @@
             feedbackWgcEl.className = 'wgc-feedback';
             nextWgcBtn.style.display = 'none';
             
-            // Reset the timer
-            timeLeftWGC = 10;
+            // Reset the timer - FIX 2: Use gameSettings.timerDuration
+            timeLeftWGC = gameSettings.timerDuration;
             updateTimerDisplay();
             
             // Start the timer
@@ -2003,30 +954,46 @@
             // Reset streak
             streak = 0;
             updateStats();
+            
+            // Clear the input field - FIX 1: Clear input when skipping
+            guessWgcEl.value = '';
         }
         
         // Function to start the timer
         function startTimer() {
-            // Clear any existing timer
-            clearInterval(timerWGC);
+            // Clear any existing timer - FIX 2: Ensure timer is properly cleared
+            if (timerWGC) {
+                clearInterval(timerWGC);
+                timerWGC = null;
+            }
             
             gameActiveWGC = true;
+            
+            // Reset timer to initial value - FIX 2: Use gameSettings.timerDuration
+            timeLeftWGC = gameSettings.timerDuration;
             
             // Update timer display immediately
             updateTimerDisplay();
             
+            // Set up the timer interval
             timerWGC = setInterval(() => {
                 timeLeftWGC--;
                 updateTimerDisplay();
                 
                 if (timeLeftWGC <= 0) {
+                    // Clear the timer
                     clearInterval(timerWGC);
+                    timerWGC = null;
                     gameActiveWGC = false;
+                    
                     // Show the right answer when timer expires
                     showFeedback('Time\'s up! The word was: ' + currentWord.word, 'error');
                     nextWgcBtn.style.display = 'block';
                     streak = 0;
                     updateStats();
+                    
+                    // Clear the input field - FIX 1: Clear input when time expires
+                    guessWgcEl.value = '';
                 }
             }, 1000);
         }
@@ -2036,8 +1003,9 @@
             // Update the timer text
             timeWgcEl.textContent = timeLeftWGC;
             
-            // Calculate the percentage for the progress bar
-            const percentage = (timeLeftWGC / 10) * 100;
+            // Calculate the percentage for the progress bar - FIX 2: Use gameSettings.timerDuration
+            const maxTime = gameSettings.timerDuration;
+            const percentage = (timeLeftWGC / maxTime) * 100;
             timerBarEl.style.width = percentage + '%';
             
             // Change color based on time left
@@ -2054,12 +1022,13 @@
         function checkGuess() {
             if (!gameActiveWGC) return;
             
-            const guess = guessWgcEl.value.trim().toLowerCase();
+            const guess = guessWgcEl.value.trim();
             const correctWord = currentWord.word.toLowerCase();
             
-            if (guess === correctWord) {
+            if (guess.toLowerCase() === correctWord) {
                 // Correct guess
                 clearInterval(timerWGC);
+                timerWGC = null;
                 gameActiveWGC = false;
                 
                 // Calculate score based on time left
@@ -2070,9 +1039,13 @@
                 showFeedback('Correct! +' + points + ' points', 'success');
                 nextWgcBtn.style.display = 'block';
                 updateStats();
+                
+                // Clear the input field after correct guess - FIX 1: Clear input after submission
+                guessWgcEl.value = '';
             } else {
                 // Incorrect guess
                 showFeedback('Incorrect. Try again!', 'error');
+                // Clear the input field for the next guess - FIX 1: Clear input after submission
                 guessWgcEl.value = '';
                 guessWgcEl.focus();
             }
@@ -2087,42 +1060,53 @@
         
         // Function to show a hint
         function showHint() {
-            if (!gameActiveWGC || hintUsed) return;
+            if (!gameActiveWGC) return;
             
             hintUsed = true;
             const word = currentWord.word.toLowerCase();
             
-            // Reveal a random letter that hasn't been revealed yet
-            const unrevealedIndices = [];
-            for (let i = 0; i < word.length; i++) {
-                if (!revealedLetters.includes(i)) {
-                    unrevealedIndices.push(i);
-                }
-            }
-            
-            if (unrevealedIndices.length > 0) {
-                const randomIndex = unrevealedIndices[Math.floor(Math.random() * unrevealedIndices.length)];
+            // If no letters have been revealed yet, initialize the array
+            if (revealedLetters.length === 0) {
+                // Reveal a random letter - FIX 3: Ensure we reveal a random letter
+                const randomIndex = Math.floor(Math.random() * word.length);
                 revealedLetters.push(randomIndex);
-                
-                // Create a hint string with underscores for unrevealed letters
-                let hint = '';
+            } else {
+                // Reveal a random letter that hasn't been revealed yet - FIX 3: Ensure we don't reveal the same letter twice
+                const unrevealedIndices = [];
                 for (let i = 0; i < word.length; i++) {
-                    if (revealedLetters.includes(i)) {
-                        hint += word[i] + ' ';
-                    } else {
-                        hint += '_ ';
+                    if (!revealedLetters.includes(i)) {
+                        unrevealedIndices.push(i);
                     }
                 }
                 
-                // Remove trailing space
-                hint = hint.trim();
-                
-                showFeedback('Hint: ' + hint.toUpperCase(), 'warning');
-                
-                // Deduct points for using a hint
-                scoreWGC = Math.max(0, scoreWGC - 2);
-                updateStats();
+                if (unrevealedIndices.length > 0) {
+                    const randomIndex = unrevealedIndices[Math.floor(Math.random() * unrevealedIndices.length)];
+                    revealedLetters.push(randomIndex);
+                } else {
+                    // All letters are already revealed
+                    showFeedback('All letters are already revealed!', 'warning');
+                    return;
+                }
             }
+            
+            // Create a hint string with underscores for unrevealed letters
+            let hint = '';
+            for (let i = 0; i < word.length; i++) {
+                if (revealedLetters.includes(i)) {
+                    hint += word[i].toUpperCase() + ' ';
+                } else {
+                    hint += '_ ';
+                }
+            }
+            
+            // Remove trailing space
+            hint = hint.trim();
+            
+            showFeedback('Hint: ' + hint, 'warning');
+            
+            // Deduct points for using a hint
+            scoreWGC = Math.max(0, scoreWGC - 2);
+            updateStats();
         }
         
         // Function to update the stats display
@@ -2133,394 +1117,22 @@
         
         // Function to open settings
         function openSettings() {
-            settingsModal.style.display = 'flex';
-        }
-        
-        // Function to close settings
-        function closeSettings() {
-            settingsModal.style.display = 'none';
-        }
-        
-        // Function to save settings
-        function saveSettings() {
-            gameSettings.rounds = parseInt(document.getElementById('rounds').value);
-            gameSettings.timerDuration = parseInt(document.getElementById('timer').value);
-            gameSettings.wordCount = parseInt(document.getElementById('words').value);
-            
-            // Update the settings display in the instructions
-            document.getElementById('settings-timer').textContent = gameSettings.timerDuration;
-            document.getElementById('settings-rounds').textContent = gameSettings.rounds;
-            document.getElementById('settings-words').textContent = gameSettings.wordCount;
-            
-            closeSettings();
-            showNotification('Settings saved successfully!');
-        }
-        
-        // Function to load a custom word list
-        function loadWordList() {
-            const fileInput = document.getElementById('word-file');
-            fileInput.click();
-        }
-        
-        // Function to use the default word list
-        function useDefaultWords() {
-            wordlistStatus.textContent = 'Using default word list (40 words)';
-            showNotification('Default word list loaded');
-        }
-        
-        // Function to set the offline role
-        function setOfflineRole(role) {
-            playerRole = role;
-            offlineRoleOverlay.style.display = 'none';
-            
-            // If the game is already active, just update the role
-            if (gameActive) {
-                updatePlayerRole();
-            }
-        }
-        
-        // Function to update the player role display
-        function updatePlayerRole() {
-            if (gameMode === 'multiplayer') {
-                playerInfoEl.textContent = playerName + ' - ' + playerRole;
-                
-                // Show the appropriate view
-                if (playerRole === 'describer') {
-                    describerView.style.display = 'block';
-                    guesserView.style.display = 'none';
-                } else {
-                    describerView.style.display = 'none';
-                    guesserView.style.display = 'block';
-                }
-            }
-        }
-        
-        // Function to switch roles in multiplayer
-        function switchRole() {
-            if (gameMode !== 'multiplayer') return;
-            
-            // Toggle the role
-            playerRole = playerRole === 'describer' ? 'guesser' : 'describer';
-            
-            // Update the UI
-            updatePlayerRole();
-            
-            // Show a notification
-            showGlobalNotification(playerName + ' switched to ' + playerRole);
-            
-            // Show the role switch notice
-            roleSwitchNotice.style.display = 'block';
-            setTimeout(() => {
-                roleSwitchNotice.style.display = 'none';
-            }, 3000);
-        }
-        
-        // Function to show a global notification
-        function showGlobalNotification(message) {
-            globalNotificationText.textContent = message;
-            globalNotification.style.display = 'block';
-            
-            setTimeout(() => {
-                globalNotification.style.display = 'none';
-            }, 3000);
+            alert('Settings would open here. In a full implementation, this would allow changing game options.');
         }
         
         // Function to reset the game
         function resetGame() {
             // Stop any active timers
-            clearInterval(timerInterval);
-            clearInterval(timerWGC);
+            if (timerWGC) {
+                clearInterval(timerWGC);
+                timerWGC = null;
+            }
             
             // Reset game state
-            gameActive = false;
-            timeLeft = gameSettings.timerDuration;
-            currentWords = [];
-            guessedWords = [];
-            score = 0;
-            scoreEl.textContent = score;
+            gameActiveWGC = false;
             
-            // Clear the words grids
-            wordsGridEl.innerHTML = '';
-            guessedWordsEl.innerHTML = '';
-            
-            // Reset the timer display
-            timerEl.textContent = timeLeft + 's';
-            
-            // If in multiplayer mode, reset roles
-            if (gameMode === 'multiplayer') {
-                playerRole = '';
-                updatePlayerRole();
-            }
-            
-            // Go back to the mode selection screen
-            switchScreen('mode-screen');
-        }
-        
-        // Function to start a new game
-        function startNewGame() {
-            gameOverNotification.style.display = 'none';
-            
-            if (gameMode === 'solo') {
-                startSoloGame();
-            } else {
-                // For multiplayer, we would need to rejoin or create a new game
-                // For now, just go back to the lobby
-                switchScreen('lobby-screen');
-            }
-        }
-        
-        // Function to return to the main menu
-        function returnToMenu() {
-            gameOverNotification.style.display = 'none';
-            resetGame();
-        }
-        
-        // Function to copy the game ID
-        function copyGameId() {
-            const gameID = gameIdDisplay.textContent;
-            navigator.clipboard.writeText(gameID).then(() => {
-                showNotification('Game ID copied to clipboard!');
-            }).catch(err => {
-                showNotification('Failed to copy game ID', 'error');
-            });
-        }
-        
-        // Function to join a game
-        function joinGame() {
-            const joinId = joinGameIdInput.value.trim().toUpperCase();
-            if (!joinId) {
-                showNotification('Please enter a game ID', 'error');
-                return;
-            }
-            
-            // In a real implementation, this would connect to Firebase and join the game
-            // For now, we'll just show a message
-            gameId = joinId;
-            gameIdDisplay.textContent = gameId;
-            
-            // Show the guest controls and hide the join section
-            guestControls.style.display = 'flex';
-            joinSection.style.display = 'none';
-            isHost = false;
-            
-            // Add the current player to the player list
-            updatePlayerList();
-            
-            showNotification('Joined game ' + gameId);
-        }
-        
-        // Function to leave the game
-        function leaveGame() {
-            // In a real implementation, this would disconnect from Firebase
-            // For now, just go back to the mode selection
-            resetGame();
-        }
-        
-        // Function to move to role selection in multiplayer
-        function moveToRoleSelection() {
-            switchScreen('multiplayer-role-screen');
-        }
-        
-        // Function to select a multiplayer role
-        function selectMultiplayerRole(role) {
-            playerRole = role;
-            
-            // Update the UI to show which role is selected
-            document.querySelectorAll('.role-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-            
-            if (role === 'describer') {
-                document.querySelector('.describer-card').classList.add('selected');
-            } else if (role === 'guesser') {
-                document.querySelector('.guesser-card').classList.add('selected');
-            }
-        }
-        
-        // Function to submit the multiplayer role
-        function submitMultiplayerRole() {
-            if (!playerRole) {
-                showNotification('Please select a role', 'error');
-                return;
-            }
-            
-            // Start the multiplayer game
-            startMultiplayerGame();
-        }
-        
-        // Function to start the multiplayer game
-        function startMultiplayerGame() {
-            gameMode = 'multiplayer';
-            switchScreen('game-screen');
-            
-            // Show the original game interface and hide the Word Guess Challenge
-            originalGameInterface.style.display = 'block';
-            wordGuessChallenge.style.display = 'none';
-            
-            // Show the multiplayer header
-            document.getElementById('game-header-multiplayer').style.display = 'flex';
-            document.getElementById('game-header-single').style.display = 'none';
-            
-            // Update player info
-            updatePlayerRole();
-            
-            // Initialize the game
-            initMultiplayerGame();
-        }
-        
-        // Function to initialize the multiplayer game
-        function initMultiplayerGame() {
-            // Reset game state
-            gameActive = false;
-            timeLeft = gameSettings.timerDuration;
-            currentWords = [];
-            guessedWords = [];
-            score = 0;
-            scoreEl.textContent = score;
-            
-            // Reset the timer display
-            timerEl.textContent = timeLeft + 's';
-            
-            // Clear the words grids
-            wordsGridEl.innerHTML = '';
-            guessedWordsEl.innerHTML = '';
-            
-            // Show the start button for the describer
-            if (playerRole === 'describer') {
-                startButton.style.display = 'block';
-            } else {
-                startButton.style.display = 'none';
-            }
-        }
-        
-        // Function to start the game (for describer)
-        function startGame() {
-            if (gameActive) return;
-            
-            gameActive = true;
-            timeLeft = gameSettings.timerDuration;
-            
-            // Generate random words
-            generateWords();
-            
-            // Display the words for the describer
-            displayWords();
-            
-            // Start the timer
-            startTimer();
-            
-            // Enable the guess input for the guesser
-            if (playerRole === 'guesser') {
-                guessInput.disabled = false;
-                guessInput.focus();
-            }
-        }
-        
-        // Function to generate random words
-        function generateWords() {
-            currentWords = [];
-            
-            // Get a random selection of words from the default list
-            const shuffled = [...defaultWords].sort(() => 0.5 - Math.random());
-            currentWords = shuffled.slice(0, gameSettings.wordCount);
-        }
-        
-        // Function to display words for the describer
-        function displayWords() {
-            wordsGridEl.innerHTML = '';
-            wordsGridEl.style.display = 'grid';
-            
-            currentWords.forEach((word, index) => {
-                const wordCard = document.createElement('div');
-                wordCard.className = 'word-card';
-                wordCard.textContent = word.split(' - ')[0]; // Just show the word, not the definition
-                wordCard.dataset.index = index;
-                
-                wordCard.addEventListener('click', () => {
-                    if (!gameActive) return;
-                    
-                    // Mark the word as guessed
-                    wordCard.classList.add('correct');
-                    
-                    // Add to guessed words
-                    if (!guessedWords.includes(word)) {
-                        guessedWords.push(word);
-                        updateScore();
-                        
-                        // Add to the guesser's view
-                        addGuessedWord(word);
-                    }
-                });
-                
-                wordsGridEl.appendChild(wordCard);
-            });
-        }
-        
-        // Function to start the timer
-        function startTimer() {
-            clearInterval(timerInterval);
-            
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                timerEl.textContent = timeLeft + 's';
-                
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    endGame();
-                }
-            }, 1000);
-        }
-        
-        // Function to submit a guess (for guesser)
-        function submitGuess() {
-            if (!gameActive || playerRole !== 'guesser') return;
-            
-            const guess = guessInput.value.trim().toLowerCase();
-            guessInput.value = '';
-            
-            // Check if the guess matches any of the current words
-            for (let i = 0; i < currentWords.length; i++) {
-                const word = currentWords[i].split(' - ')[0].toLowerCase();
-                if (word === guess && !guessedWords.includes(currentWords[i])) {
-                    // Correct guess
-                    guessedWords.push(currentWords[i]);
-                    updateScore();
-                    
-                    // Add to the guesser's view
-                    addGuessedWord(currentWords[i]);
-                    
-                    // Mark the word as guessed in the describer's view
-                    const wordCard = document.querySelector(`.word-card[data-index="${i}"]`);
-                    if (wordCard) {
-                        wordCard.classList.add('correct');
-                    }
-                    
-                    break;
-                }
-            }
-        }
-        
-        // Function to add a guessed word to the guesser's view
-        function addGuessedWord(word) {
-            const wordCard = document.createElement('div');
-            wordCard.className = 'word-card correct';
-            wordCard.textContent = word.split(' - ')[0]; // Just show the word, not the definition
-            guessedWordsEl.appendChild(wordCard);
-        }
-        
-        // Function to update the score
-        function updateScore() {
-            score = guessedWords.length * 10;
-            scoreEl.textContent = score;
-        }
-        
-        // Function to end the game
-        function endGame() {
-            gameActive = false;
-            
-            // Show game over notification
-            gameOverMessage.textContent = `Your score: ${score} points (${guessedWords.length} words)`;
-            gameOverNotification.style.display = 'block';
+            // Reinitialize the game
+            initWordGuessChallenge();
         }
     </script>
 </body>
