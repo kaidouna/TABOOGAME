@@ -27,7 +27,7 @@
         
         .container {
             width: 100%;
-            max-width: 1000px;
+            max-width: 1200px;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 24px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
@@ -149,6 +149,11 @@
             color: white;
         }
         
+        .btn-success {
+            background: linear-gradient(135deg, #0ba360 0%, #3cba92 100%);
+            color: white;
+        }
+        
         .game-screen {
             display: none;
             padding: 30px;
@@ -170,7 +175,7 @@
         /* Word Guess Challenge Styles */
         .word-guess-container {
             width: 100%;
-            max-width: 600px;
+            max-width: 1000px;
             margin: 0 auto;
             background: white;
             border-radius: 24px;
@@ -494,21 +499,339 @@
             display: none !important;
         }
         
-        @media (max-width: 768px) {
-            .wgc-content {
-                padding: 30px 20px;
+        .hotkey-hint {
+            font-size: 0.9rem;
+            color: #718096;
+            margin-top: 8px;
+        }
+        
+        /* Settings Modal Styles */
+        .settings-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .settings-content {
+            background: white;
+            padding: 40px;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 20px;
+        }
+        
+        .settings-header h2 {
+            color: #4a5568;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .close-settings {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #a0aec0;
+            transition: color 0.3s ease;
+        }
+        
+        .close-settings:hover {
+            color: #4a5568;
+        }
+        
+        .setting-item {
+            margin-bottom: 30px;
+        }
+        
+        .setting-item label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        
+        .setting-item input[type="range"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .setting-item input[type="range"]:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .setting-item .value-display {
+            margin-top: 8px;
+            font-size: 0.9rem;
+            color: #718096;
+        }
+        
+        .setting-description {
+            margin-top: 8px;
+            font-size: 0.9rem;
+            color: #718096;
+            line-height: 1.5;
+        }
+        
+        .save-settings {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 12px;
+            font-size: 1rem;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .save-settings:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        /* New styles for player management */
+        .player-list {
+            margin: 20px 0;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 15px;
+        }
+        
+        .player-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .player-item:last-child {
+            border-bottom: none;
+        }
+        
+        .player-name {
+            font-weight: 500;
+        }
+        
+        .remove-player {
+            color: #f5576c;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        /* Scoreboard styles */
+        .scoreboard {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        }
+        
+        .scoreboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .scoreboard-title {
+            font-weight: 700;
+            color: #4a5568;
+            font-size: 1.2rem;
+        }
+        
+        .scoreboard-round {
+            font-weight: 600;
+            color: #667eea;
+        }
+        
+        .scoreboard-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .scoreboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .scoreboard-player {
+            font-weight: 500;
+        }
+        
+        .scoreboard-score {
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        /* Dropdown styles */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .dropdown-content a {
+            color: #4a5568;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            cursor: pointer;
+        }
+        
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .show {
+            display: block;
+        }
+        
+        /* New styles for multiple words display */
+        .words-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        
+        .word-item {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: #4a5568;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .word-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .word-item.correct {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+        
+        .word-item.skipped {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        .word-text {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .word-dropdown {
+            width: 100%;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            color: #4a5568;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        
+        .words-label {
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+        }
+        
+        @media (max-width: 1024px) {
+            .words-container {
+                grid-template-columns: repeat(4, 1fr);
             }
-            
+        }
+        
+        @media (max-width: 768px) {
             .wgc-button-group {
                 flex-direction: column;
             }
             
-            .wgc-header h1 {
-                font-size: 2rem;
-            }
-            
             .input-group input {
                 width: 100%;
+            }
+            
+            .settings-content {
+                width: 95%;
+                padding: 30px 20px;
+            }
+            
+            .scoreboard-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .words-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .words-container {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
     </style>
@@ -520,49 +843,65 @@
                 <i class="fas fa-cog"></i>
             </div>
             <h1>TABOGAME</h1>
-            <p id="game-mode-header">Single Player Word Game</p>
+            <p>Multiplayer Word Game</p>
         </header>
         
-        <!-- Mode Selection Screen -->
-        <div class="setup-screen" id="mode-screen">
-            <h2>Select Game Mode</h2>
-            <div class="mode-selection">
-                <div class="mode-card solo-card" onclick="selectMode('solo')">
-                    <i class="fas fa-user fa-3x"></i>
-                    <h3>Single Player</h3>
-                    <p>Guess words from descriptions</p>
+        <!-- Player Name Screen -->
+        <div class="setup-screen" id="name-screen">
+            <h2>Game Setup</h2>
+            
+            <div class="input-group">
+                <label>Game Instructions</label>
+                <div style="text-align: left; background: #f5f7fa; padding: 20px; border-radius: 12px; margin: 15px 0;">
+                    <p><strong>How to play:</strong></p>
+                    <ol style="margin-left: 20px; margin-top: 10px;">
+                        <li>Add players using the "New Player" button</li>
+                        <li>Click "Continue" to start the game</li>
+                        <li>As the describer, you'll see words to describe to other players</li>
+                        <li>When a player guesses correctly, select their name from the dropdown to award points</li>
+                        <li>The scoreboard at the bottom will update in real time</li>
+                        <li>Use "Copy to FFT" to copy the results</li>
+                    </ol>
                 </div>
             </div>
-        </div>
-        
-        <!-- Player Name Screen -->
-        <div class="setup-screen" id="name-screen" style="display: none;">
-            <h2>Enter Your NickName</h2>
+            
             <div class="input-group">
+                <label for="player-name">Describer Name</label>
                 <input type="text" id="player-name" placeholder="Your name" maxlength="15">
-                <p class="hotkey-hint">Press Enter to continue</p>
             </div>
             
-            <button class="btn btn-primary" onclick="submitName()">Continue</button>
-            <button class="btn btn-secondary" onclick="switchScreen('mode-screen')">Back</button>
+            <div>
+                <button class="btn btn-primary" onclick="submitName()">Continue</button>
+                <button class="btn btn-secondary" onclick="addNewPlayer()">New Player</button>
+            </div>
+            
+            <div class="player-list" id="player-list">
+                <div class="player-item" style="font-weight: bold;">
+                    <span>Player Name</span>
+                    <span>Score</span>
+                </div>
+                <!-- Players will be added here dynamically -->
+            </div>
         </div>
         
         <!-- Game Screen -->
         <div class="game-screen" id="game-screen">
-            <div class="game-header" id="game-header-single">
-                <span id="player-info-single">Single Player Mode</span>
+            <div class="game-header">
+                <span id="player-info">Player Name</span>
                 <div>
+                    <span id="round-counter" style="margin-right: 15px;">Round: 1</span>
+                    <button class="btn btn-success" onclick="copyToFFT()">Copy to FFT</button>
                     <button class="btn btn-danger" onclick="resetGame()">Reset Game</button>
                 </div>
             </div>
             
-            <!-- Word Guess Challenge Interface (Single Player Only) -->
+            <!-- Word Guess Challenge Interface -->
             <div id="word-guess-challenge">
                 <div class="word-guess-container">
                     <!-- Header -->
                     <div class="wgc-header">
                         <h1>Word Guess Challenge</h1>
-                        <p>Guess the word before time runs out!</p>
+                        <p>Describe the words to your team without saying them directly!</p>
                     </div>
                     
                     <!-- Game Area -->
@@ -585,7 +924,7 @@
                         <div class="wgc-timer-section hidden" id="timer-section">
                             <div class="wgc-timer-header">
                                 <span class="wgc-timer-label">Time remaining:</span>
-                                <span id="time" class="wgc-timer-value">10</span>
+                                <span id="time" class="wgc-timer-value">90</span>
                             </div>
                             <div class="wgc-timer-bar-container">
                                 <div id="timer-bar" class="wgc-timer-bar" style="width: 100%"></div>
@@ -594,81 +933,140 @@
                         
                         <!-- Description -->
                         <div class="wgc-definition-section">
-                            <div class="wgc-definition-label">DESCRIPTION</div>
+                            <div class="wgc-definition-label">WORDS TO DESCRIBE</div>
                             <p id="definition" class="wgc-definition-text">Please select your words.txt file or click 'Start Game' to begin with default words...</p>
+                            <div class="words-label" id="words-count-label" style="display: none;">Showing 20 words (change in settings)</div>
+                            <div class="words-container" id="words-container">
+                                <!-- Words will be displayed here -->
+                            </div>
                         </div>
                         
                         <!-- Input Area -->
                         <div class="wgc-input-section hidden" id="input-section">
-                            <label for="guess" class="wgc-input-label">Enter word:</label>
-                            <div class="wgc-input-container">
-                                <input type="text" id="guess" autocomplete="off" class="wgc-input"
-                                    placeholder="Type your guess...">
-                                <button id="submit" class="wgc-submit-btn">Submit</button>
-                            </div>
-                            
                             <div class="wgc-button-group">
-                                <button id="hint-btn" class="wgc-hint-btn">
-                                    <i class="fas fa-lightbulb"></i>
-                                    Hint
-                                </button>
-                                <button id="next-word-btn" class="wgc-next-btn">
+                                <button id="next-word-btn" class="wgc-next-btn" onclick="loadNextWordSet()">
                                     <i class="fas fa-forward"></i>
-                                    Next Word
+                                    Next Set
                                 </button>
-                                <button id="skip-btn" class="wgc-skip-btn">
+                                <button id="skip-btn" class="wgc-skip-btn" onclick="skipWordSet()">
                                     <i class="fas fa-fast-forward"></i>
-                                    Skip
+                                    Skip Set
                                 </button>
                             </div>
                             
                             <button id="next-btn" class="wgc-next-word-btn">
                                 <i class="fas fa-arrow-right"></i>
-                                Next Word
+                                Next Word Set
                             </button>
                         </div>
                         
                         <!-- Feedback -->
                         <div id="feedback" class="wgc-feedback"></div>
-                        
-                        <!-- Stats -->
-                        <div class="wgc-stats hidden" id="stats-section">
-                            <div class="wgc-stat-item">
-                                <i class="fas fa-star"></i>
-                                Score: <span id="score-wgc" class="wgc-stat-value">0</span>
-                            </div>
-                            <div class="wgc-stat-item">
-                                <i class="fas fa-fire"></i>
-                                Streak: <span id="streak" class="wgc-stat-value">0</span>
-                            </div>
-                        </div>
                     </div>
+                </div>
+            </div>
+            
+            <!-- Scoreboard -->
+            <div class="scoreboard">
+                <div class="scoreboard-header">
+                    <div class="scoreboard-title">Scoreboard</div>
+                    <div class="scoreboard-round" id="round-display">Round: 1</div>
+                </div>
+                <div class="scoreboard-list" id="scoreboard">
+                    <!-- Scoreboard items will be added here dynamically -->
                 </div>
             </div>
         </div>
     </div>
+    
+    <!-- Settings Modal -->
+    <div class="settings-modal" id="settings-modal">
+        <div class="settings-content">
+            <div class="settings-header">
+                <h2>Game Settings</h2>
+                <div class="close-settings" onclick="closeSettings()">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <label for="timer-duration">Timer Duration (seconds)</label>
+                <input type="range" id="timer-duration" min="10" max="180" value="90" step="10">
+                <div class="value-display" id="timer-duration-value">90 seconds</div>
+                <div class="setting-description">
+                    Adjust the time limit for each word. Shorter durations (10-30 seconds) create a fast-paced game, 
+                    while longer durations (60-180 seconds) allow for more detailed descriptions and strategic thinking.
+                </div>
+            </div>
+            
+            <div class="setting-item">
+                <label for="words-count">Number of Words to Show</label>
+                <input type="range" id="words-count" min="1" max="20" value="20" step="1">
+                <div class="value-display" id="words-count-value">20 words</div>
+                <div class="setting-description">
+                    Control how many words are displayed to the describer at once. Fewer words (1-3) make the game easier, 
+                    while more words (5-20) increase the challenge by giving the describer more options to describe.
+                </div>
+            </div>
+            
+            <!-- Player Management in Settings -->
+            <div class="setting-item">
+                <label>Player Management</label>
+                <div class="player-list" id="settings-player-list">
+                    <div class="player-item" style="font-weight: bold;">
+                        <span>Player Name</span>
+                        <span>Action</span>
+                    </div>
+                    <!-- Players will be added here dynamically -->
+                </div>
+                <button class="btn btn-secondary" onclick="addNewPlayerFromSettings()" style="width: 100%; margin-top: 10px;">
+                    <i class="fas fa-plus"></i> Add New Player
+                </button>
+            </div>
+            
+            <!-- Default Players Button -->
+            <div class="setting-item">
+                <label>Default Players</label>
+                <button class="btn btn-secondary" onclick="loadDefaultPlayers()" style="width: 100%;">
+                    <i class="fas fa-users"></i> Load Default Players
+                </button>
+                <div class="setting-description">
+                    Reset to the default set of players (Imene, Shika, Ilya, Snooker, Anshu).
+                </div>
+            </div>
+            
+            <button class="save-settings" onclick="saveSettings()">Save Settings</button>
+        </div>
+    </div>
+    
     <script>
+        // Default hardcoded players list
+        const defaultPlayers = [
+            { name: 'Imene', score: 0 },
+            { name: 'Shika', score: 0 },
+            { name: 'Ilya', score: 0 },
+            { name: 'Snooker', score: 0 },
+            { name: 'Anshu', score: 0 }
+        ];
+
         // Game state
-        let gameActive = false;
         let playerName = '';
-        let gameMode = 'solo';
+        let players = [...defaultPlayers]; // Initialize with default players
+        let currentRound = 1;
         
         // Word Guess Challenge state
         let wordData = [];
         let usedIndices = [];
-        let currentWord = "";
-        let scoreWGC = 0;
-        let streak = 0;
-        let timeLeftWGC = 10;
+        let currentWords = [];
+        let timeLeftWGC = 90;
         let timerWGC = null;
         let gameActiveWGC = false;
-        let hintUsed = false;
-        let revealedLetters = [];
         let gameStarted = false;
         
-        // Game settings with default values
+        // Game settings with default values (90 seconds and 20 words)
         let gameSettings = {
-            timerDuration: 10
+            timerDuration: 90,
+            wordsCount: 20
         };
         
         // Default word list
@@ -692,58 +1090,86 @@
             "pencil - A writing instrument with a solid pigment core",
             "paper - Material manufactured in thin sheets from wood pulp",
             "teacher - A person who teaches in a school",
-            "student - A person who is studying at a school or college"
+            "student - A person who is studying at a school or college",
+            "phone - A device used to communicate over long distances",
+            "window - An opening in a wall to let in light and air",
+            "door - A movable barrier used to open and close an entrance",
+            "chair - A piece of furniture for one person to sit on",
+            "table - A piece of furniture with a flat top and legs",
+            "car - A road vehicle with an engine and four wheels",
+            "bicycle - A vehicle with two wheels powered by pedals",
+            "train - A series of connected vehicles moving on rails",
+            "airplane - A vehicle that flies through the air",
+            "ship - A large boat for transporting people or goods by sea",
+            "dog - A domesticated carnivorous mammal",
+            "cat - A small domesticated carnivorous mammal",
+            "bird - A warm-blooded egg-laying vertebrate animal",
+            "fish - A limbless cold-blooded vertebrate animal",
+            "tree - A woody perennial plant with a single main stem",
+            "flower - The seed-bearing part of a plant",
+            "sun - The star around which the earth orbits",
+            "moon - The natural satellite of the earth",
+            "star - A fixed luminous point in the night sky",
+            "cloud - A visible mass of condensed water vapor",
+            "rain - Moisture condensed from the atmosphere falling in drops",
+            "snow - Atmospheric water vapor frozen into ice crystals",
+            "wind - The natural movement of air",
+            "fire - The phenomenon of combustion",
+            "water - A transparent, tasteless, odorless liquid",
+            "earth - The planet on which we live",
+            "music - Vocal or instrumental sounds combined for beauty",
+            "art - The expression of human creative skill",
+            "sport - An activity involving physical exertion",
+            "game - An activity for enjoyment or competition"
         ];
         
         // DOM elements
-        const modeScreen = document.getElementById('mode-screen');
         const nameScreen = document.getElementById('name-screen');
         const gameScreen = document.getElementById('game-screen');
         const playerNameInput = document.getElementById('player-name');
-        const gameModeHeader = document.getElementById('game-mode-header');
+        const playerInfoEl = document.getElementById('player-info');
+        const playerListEl = document.getElementById('player-list');
+        const scoreboardEl = document.getElementById('scoreboard');
+        const roundCounterEl = document.getElementById('round-counter');
+        const roundDisplayEl = document.getElementById('round-display');
         
         // Word Guess Challenge DOM elements
         const definitionEl = document.getElementById('definition');
-        const guessWgcEl = document.getElementById('guess');
-        const submitWgcBtn = document.getElementById('submit');
-        const nextWgcBtn = document.getElementById('next-btn');
-        const nextWordBtn = document.getElementById('next-word-btn');
-        const skipBtn = document.getElementById('skip-btn');
-        const hintBtn = document.getElementById('hint-btn');
-        const feedbackWgcEl = document.getElementById('feedback');
-        const scoreWgcEl = document.getElementById('score-wgc');
-        const streakEl = document.getElementById('streak');
-        const timeWgcEl = document.getElementById('time');
-        const timerBarEl = document.getElementById('timer-bar');
+        const wordsContainerEl = document.getElementById('words-container');
+        const wordsCountLabelEl = document.getElementById('words-count-label');
         const fileLoadSection = document.getElementById('file-load-section');
         const timerSection = document.getElementById('timer-section');
         const inputSection = document.getElementById('input-section');
-        const statsSection = document.getElementById('stats-section');
+        const feedbackWgcEl = document.getElementById('feedback');
+        const timeWgcEl = document.getElementById('time');
+        const timerBarEl = document.getElementById('timer-bar');
         const startGameBtn = document.getElementById('start-game');
         const wordFileInput = document.getElementById('word-file');
         
+        // Settings DOM elements
+        const settingsModal = document.getElementById('settings-modal');
+        const timerDurationSlider = document.getElementById('timer-duration');
+        const timerDurationValue = document.getElementById('timer-duration-value');
+        const wordsCountSlider = document.getElementById('words-count');
+        const wordsCountValue = document.getElementById('words-count-value');
+        const settingsPlayerListEl = document.getElementById('settings-player-list');
+        
         // Initialize the game when the page loads
         window.onload = function() {
-            // Show the mode selection screen
-            switchScreen('mode-screen');
+            // Show the name screen
+            nameScreen.style.display = 'block';
+            
+            // Update player list with default players
+            updatePlayerList();
             
             // Set up keyboard shortcuts
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
-                    if (document.getElementById('name-screen').style.display !== 'none') {
+                    if (nameScreen.style.display !== 'none') {
                         submitName();
-                    } else if (gameMode === 'solo' && gameActiveWGC) {
-                        checkGuess();
                     }
                 }
             });
-            
-            // Initialize Word Guess Challenge event listeners
-            submitWgcBtn.addEventListener('click', checkGuess);
-            nextWgcBtn.addEventListener('click', loadNextWord);
-            hintBtn.addEventListener('click', showHint);
-            skipBtn.addEventListener('click', skipWord);
-            nextWordBtn.addEventListener('click', loadNextWord);
             
             // Set up file input for Word Guess Challenge
             wordFileInput.addEventListener('change', handleFileSelect);
@@ -753,34 +1179,114 @@
                 wordFileInput.click();
             });
             
-            // Add event listener for Enter key on guess input in single player mode
-            guessWgcEl.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter' && gameActiveWGC) {
-                    checkGuess();
-                }
+            // Set up settings sliders
+            timerDurationSlider.addEventListener('input', function() {
+                timerDurationValue.textContent = this.value + ' seconds';
+            });
+            
+            wordsCountSlider.addEventListener('input', function() {
+                wordsCountValue.textContent = this.value + (this.value == 1 ? ' word' : ' words');
             });
         };
         
-        // Function to switch between screens
-        function switchScreen(screenId) {
-            // Hide all screens
-            document.querySelectorAll('.setup-screen, .game-screen').forEach(screen => {
-                screen.style.display = 'none';
+        // Function to load default players
+        function loadDefaultPlayers() {
+            players = [...defaultPlayers];
+            updatePlayerList();
+            updateScoreboard();
+            updateSettingsPlayerList();
+            alert('Default players loaded!');
+        }
+        
+        // Function to add a new player
+        function addNewPlayer() {
+            const name = prompt("Enter player name:");
+            if (name && name.trim() !== '') {
+                players.push({
+                    name: name.trim(),
+                    score: 0
+                });
+                updatePlayerList();
+            }
+        }
+        
+        // Function to update the player list
+        function updatePlayerList() {
+            playerListEl.innerHTML = `
+                <div class="player-item" style="font-weight: bold;">
+                    <span>Player Name</span>
+                    <span>Score</span>
+                </div>
+            `;
+            
+            players.forEach((player, index) => {
+                const playerEl = document.createElement('div');
+                playerEl.className = 'player-item';
+                playerEl.innerHTML = `
+                    <span class="player-name">${player.name}</span>
+                    <span>${player.score}</span>
+                    <span class="remove-player" onclick="removePlayer(${index})">
+                        <i class="fas fa-times"></i>
+                    </span>
+                `;
+                playerListEl.appendChild(playerEl);
             });
             
-            // Show the selected screen
-            document.getElementById(screenId).style.display = 'block';
+            // Also update the settings player list
+            updateSettingsPlayerList();
         }
         
-        // Function to select a game mode
-        function selectMode(mode) {
-            gameMode = mode;
-            submitMode();
+        // Function to update the settings player list
+        function updateSettingsPlayerList() {
+            settingsPlayerListEl.innerHTML = `
+                <div class="player-item" style="font-weight: bold;">
+                    <span>Player Name</span>
+                    <span>Action</span>
+                </div>
+            `;
+            
+            players.forEach((player, index) => {
+                const playerEl = document.createElement('div');
+                playerEl.className = 'player-item';
+                playerEl.innerHTML = `
+                    <span class="player-name">${player.name}</span>
+                    <span class="remove-player" onclick="removePlayerFromSettings(${index})">
+                        <i class="fas fa-times"></i> Remove
+                    </span>
+                `;
+                settingsPlayerListEl.appendChild(playerEl);
+            });
         }
         
-        // Function to submit the selected mode and proceed
-        function submitMode() {
-            switchScreen('name-screen');
+        // Function to remove a player
+        function removePlayer(index) {
+            players.splice(index, 1);
+            updatePlayerList();
+        }
+        
+        // Function to remove a player from settings
+        function removePlayerFromSettings(index) {
+            players.splice(index, 1);
+            updatePlayerList();
+            updateScoreboard();
+        }
+        
+        // Function to update the scoreboard
+        function updateScoreboard() {
+            scoreboardEl.innerHTML = '';
+            
+            // Sort players by score (descending)
+            const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
+            
+            sortedPlayers.forEach(player => {
+                const scoreItem = document.createElement('div');
+                scoreItem.className = 'scoreboard-item';
+                scoreItem.innerHTML = `
+                    <span class="scoreboard-player">${player.name}</span>
+                    <span class="scoreboard-score">${player.score}</span>
+                `;
+                scoreboardEl.appendChild(scoreItem);
+            });
         }
         
         // Function to submit the player name
@@ -792,17 +1298,25 @@
                 return;
             }
             
+            // Add the describer as a player
+            players.push({
+                name: playerName,
+                score: 0,
+                isDescriber: true
+            });
+            
             // Clear the name input field
             playerNameInput.value = '';
             
-            if (gameMode === 'solo') {
-                startSoloGame();
-            }
-        }
-        
-        // Function to start the solo game
-        function startSoloGame() {
-            switchScreen('game-screen');
+            // Update player info
+            playerInfoEl.textContent = playerName;
+            
+            // Hide the name screen and show the game screen
+            nameScreen.style.display = 'none';
+            gameScreen.style.display = 'block';
+            
+            // Update the scoreboard
+            updateScoreboard();
             
             // Initialize the Word Guess Challenge game
             initWordGuessChallenge();
@@ -820,21 +1334,20 @@
             });
             
             usedIndices = [];
-            scoreWGC = 0;
-            streak = 0;
             gameStarted = false;
-            updateStats();
             
             // Show the file load section
             fileLoadSection.style.display = 'block';
             
-            // Hide the timer, input, and stats sections
+            // Hide the timer and input sections
             timerSection.classList.add('hidden');
             inputSection.classList.add('hidden');
-            statsSection.classList.add('hidden');
             
             // Set the definition text
             definitionEl.textContent = "Click 'Start Game' to begin playing!";
+            wordsContainerEl.innerHTML = '';
+            wordsCountLabelEl.style.display = 'none';
+            definitionEl.onclick = null;
         }
         
         // Function to start the Word Guess Challenge game
@@ -845,14 +1358,178 @@
                 // Hide the file load section
                 fileLoadSection.style.display = 'none';
                 
-                // Show the timer, input, and stats sections
+                // Show the timer and input sections
                 timerSection.classList.remove('hidden');
                 inputSection.classList.remove('hidden');
-                statsSection.classList.remove('hidden');
                 
-                // Load the first word
-                loadNextWord();
+                // Show the words count label
+                wordsCountLabelEl.style.display = 'block';
+                updateWordsCountLabel();
+                
+                // Load the first set of words
+                loadNextWordSet();
             }
+        }
+        
+        // Function to update the words count label
+        function updateWordsCountLabel() {
+            wordsCountLabelEl.textContent = `Showing ${gameSettings.wordsCount} word${gameSettings.wordsCount !== 1 ? 's' : ''} (change in settings)`;
+        }
+        
+        // Function to load the next set of words
+        function loadNextWordSet() {
+            // If we've used all words, reset the used indices and increment round
+            if (usedIndices.length >= wordData.length) {
+                usedIndices = [];
+                currentRound++;
+                roundCounterEl.textContent = `Round: ${currentRound}`;
+                roundDisplayEl.textContent = `Round: ${currentRound}`;
+            }
+            
+            // Get random words that haven't been used yet
+            currentWords = [];
+            const wordsToGet = Math.min(gameSettings.wordsCount, wordData.length - usedIndices.length);
+            
+            for (let i = 0; i < wordsToGet; i++) {
+                let randomIndex;
+                do {
+                    randomIndex = Math.floor(Math.random() * wordData.length);
+                } while (usedIndices.includes(randomIndex));
+                
+                usedIndices.push(randomIndex);
+                currentWords.push(wordData[randomIndex]);
+            }
+            
+            // Display the words
+            displayWords(currentWords);
+            
+            // Hide the feedback and next button
+            feedbackWgcEl.style.display = 'none';
+            feedbackWgcEl.className = 'wgc-feedback';
+            document.getElementById('next-btn').style.display = 'none';
+            
+            // Reset the timer
+            timeLeftWGC = gameSettings.timerDuration;
+            updateTimerDisplay();
+            
+            // Start the timer
+            startTimer();
+        }
+        
+        // Function to display words in the container
+        function displayWords(words) {
+            wordsContainerEl.innerHTML = '';
+            
+            words.forEach((wordData, index) => {
+                const wordEl = document.createElement('div');
+                wordEl.className = 'word-item';
+                wordEl.setAttribute('data-index', index);
+                
+                // Create word text
+                const wordText = document.createElement('div');
+                wordText.className = 'word-text';
+                wordText.textContent = wordData.word;
+                
+                // Create dropdown for players
+                const dropdown = document.createElement('select');
+                dropdown.className = 'word-dropdown';
+                
+                // Add default option
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.textContent = 'Select player';
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                dropdown.appendChild(defaultOption);
+                
+                // Add players to dropdown (excluding the describer)
+                players.forEach(player => {
+                    if (!player.isDescriber) {
+                        const option = document.createElement('option');
+                        option.value = player.name;
+                        option.textContent = player.name;
+                        dropdown.appendChild(option);
+                    }
+                });
+                
+                // Add event listener to dropdown
+                dropdown.addEventListener('change', function() {
+                    if (this.value) {
+                        awardPoints(this.value, wordData, index);
+                        this.disabled = true;
+                    }
+                });
+                
+                // Add elements to word item
+                wordEl.appendChild(wordText);
+                wordEl.appendChild(dropdown);
+                
+                wordsContainerEl.appendChild(wordEl);
+            });
+        }
+        
+        // Function to award points to a player
+        function awardPoints(playerName, wordData, wordIndex) {
+            if (!gameActiveWGC) return;
+            
+            // Find the player
+            const player = players.find(p => p.name === playerName);
+            if (!player) return;
+            
+            // Stop the timer if all words are completed
+            const allWordsGuessed = Array.from(wordsContainerEl.children).every(wordEl => 
+                wordEl.querySelector('select').disabled
+            );
+            
+            if (allWordsGuessed) {
+                clearInterval(timerWGC);
+                gameActiveWGC = false;
+            }
+            
+            // Calculate points based on time left
+            const points = Math.max(1, Math.floor(timeLeftWGC));
+            
+            // Award points to the player
+            player.score += points;
+            
+            // Mark the word as completed
+            const wordEl = document.querySelector(`.word-item[data-index="${wordIndex}"]`);
+            wordEl.classList.add('correct');
+            
+            // Update scoreboard
+            updateScoreboard();
+            
+            // Show feedback
+            showFeedback(`${player.name} guessed "${wordData.word}"! +${points} points`, 'success');
+            
+            // Check if all words have been guessed
+            if (allWordsGuessed) {
+                // Show the next button
+                document.getElementById('next-btn').style.display = 'block';
+            }
+        }
+        
+        // Function to skip the current word set
+        function skipWordSet() {
+            if (!gameActiveWGC) return;
+            
+            // Stop the timer
+            clearInterval(timerWGC);
+            gameActiveWGC = false;
+            
+            // Mark all words as skipped
+            Array.from(wordsContainerEl.children).forEach(wordEl => {
+                if (!wordEl.classList.contains('correct')) {
+                    wordEl.classList.add('skipped');
+                    wordEl.querySelector('select').disabled = true;
+                }
+            });
+            
+            // Show feedback that the set was skipped
+            showFeedback('Skipped the word set!', 'warning');
+            
+            // Show the next button
+            document.getElementById('next-btn').style.display = 'block';
         }
         
         // Function to handle file selection
@@ -895,81 +1572,16 @@
             }
         }
         
-        // Function to load the next word
-        function loadNextWord() {
-            // Reset hint state
-            hintUsed = false;
-            revealedLetters = [];
-            
-            // If we've used all words, reset the used indices
-            if (usedIndices.length >= wordData.length) {
-                usedIndices = [];
-            }
-            
-            // Get a random word that hasn't been used yet
-            let randomIndex;
-            do {
-                randomIndex = Math.floor(Math.random() * wordData.length);
-            } while (usedIndices.includes(randomIndex));
-            
-            usedIndices.push(randomIndex);
-            currentWord = wordData[randomIndex];
-            
-            // Display the definition
-            definitionEl.textContent = currentWord.definition;
-            
-            // Clear the guess input - FIX 1: Clear input when loading new word
-            guessWgcEl.value = '';
-            
-            // Hide the feedback and next button
-            feedbackWgcEl.style.display = 'none';
-            feedbackWgcEl.className = 'wgc-feedback';
-            nextWgcBtn.style.display = 'none';
-            
-            // Reset the timer - FIX 2: Use gameSettings.timerDuration
-            timeLeftWGC = gameSettings.timerDuration;
-            updateTimerDisplay();
-            
-            // Start the timer
-            startTimer();
-            
-            // Focus on the guess input
-            guessWgcEl.focus();
-        }
-        
-        // Function to skip the current word
-        function skipWord() {
-            if (!gameActiveWGC) return;
-            
-            // Stop the timer
-            clearInterval(timerWGC);
-            gameActiveWGC = false;
-            
-            // Show feedback that the word was skipped
-            showFeedback('Skipped! The word was: ' + currentWord.word, 'warning');
-            
-            // Show the next button
-            nextWgcBtn.style.display = 'block';
-            
-            // Reset streak
-            streak = 0;
-            updateStats();
-            
-            // Clear the input field - FIX 1: Clear input when skipping
-            guessWgcEl.value = '';
-        }
-        
         // Function to start the timer
         function startTimer() {
-            // Clear any existing timer - FIX 2: Ensure timer is properly cleared
+            // Clear any existing timer
             if (timerWGC) {
                 clearInterval(timerWGC);
-                timerWGC = null;
             }
             
             gameActiveWGC = true;
             
-            // Reset timer to initial value - FIX 2: Use gameSettings.timerDuration
+            // Reset timer to initial value
             timeLeftWGC = gameSettings.timerDuration;
             
             // Update timer display immediately
@@ -983,17 +1595,19 @@
                 if (timeLeftWGC <= 0) {
                     // Clear the timer
                     clearInterval(timerWGC);
-                    timerWGC = null;
                     gameActiveWGC = false;
                     
-                    // Show the right answer when timer expires
-                    showFeedback('Time\'s up! The word was: ' + currentWord.word, 'error');
-                    nextWgcBtn.style.display = 'block';
-                    streak = 0;
-                    updateStats();
+                    // Mark all unguessed words as skipped
+                    Array.from(wordsContainerEl.children).forEach(wordEl => {
+                        if (!wordEl.classList.contains('correct')) {
+                            wordEl.classList.add('skipped');
+                            wordEl.querySelector('select').disabled = true;
+                        }
+                    });
                     
-                    // Clear the input field - FIX 1: Clear input when time expires
-                    guessWgcEl.value = '';
+                    // Show feedback when timer expires
+                    showFeedback('Time\'s up! Moving to next word set.', 'error');
+                    document.getElementById('next-btn').style.display = 'block';
                 }
             }, 1000);
         }
@@ -1003,7 +1617,7 @@
             // Update the timer text
             timeWgcEl.textContent = timeLeftWGC;
             
-            // Calculate the percentage for the progress bar - FIX 2: Use gameSettings.timerDuration
+            // Calculate the percentage for the progress bar
             const maxTime = gameSettings.timerDuration;
             const percentage = (timeLeftWGC / maxTime) * 100;
             timerBarEl.style.width = percentage + '%';
@@ -1018,39 +1632,6 @@
             }
         }
         
-        // Function to check the guess
-        function checkGuess() {
-            if (!gameActiveWGC) return;
-            
-            const guess = guessWgcEl.value.trim();
-            const correctWord = currentWord.word.toLowerCase();
-            
-            if (guess.toLowerCase() === correctWord) {
-                // Correct guess
-                clearInterval(timerWGC);
-                timerWGC = null;
-                gameActiveWGC = false;
-                
-                // Calculate score based on time left
-                const points = Math.max(1, Math.floor(timeLeftWGC));
-                scoreWGC += points;
-                streak++;
-                
-                showFeedback('Correct! +' + points + ' points', 'success');
-                nextWgcBtn.style.display = 'block';
-                updateStats();
-                
-                // Clear the input field after correct guess - FIX 1: Clear input after submission
-                guessWgcEl.value = '';
-            } else {
-                // Incorrect guess
-                showFeedback('Incorrect. Try again!', 'error');
-                // Clear the input field for the next guess - FIX 1: Clear input after submission
-                guessWgcEl.value = '';
-                guessWgcEl.focus();
-            }
-        }
-        
         // Function to show feedback
         function showFeedback(message, type) {
             feedbackWgcEl.textContent = message;
@@ -1058,66 +1639,71 @@
             feedbackWgcEl.style.display = 'block';
         }
         
-        // Function to show a hint
-        function showHint() {
-            if (!gameActiveWGC) return;
+        // Function to copy results to clipboard
+        function copyToFFT() {
+            let resultText = `TaboGame Results - Round ${currentRound}\n\n`;
             
-            hintUsed = true;
-            const word = currentWord.word.toLowerCase();
+            // Sort players by score (descending)
+            const sortedPlayers = [...players].sort((a, b) => b.score - a.score);
             
-            // If no letters have been revealed yet, initialize the array
-            if (revealedLetters.length === 0) {
-                // Reveal a random letter - FIX 3: Ensure we reveal a random letter
-                const randomIndex = Math.floor(Math.random() * word.length);
-                revealedLetters.push(randomIndex);
-            } else {
-                // Reveal a random letter that hasn't been revealed yet - FIX 3: Ensure we don't reveal the same letter twice
-                const unrevealedIndices = [];
-                for (let i = 0; i < word.length; i++) {
-                    if (!revealedLetters.includes(i)) {
-                        unrevealedIndices.push(i);
-                    }
-                }
-                
-                if (unrevealedIndices.length > 0) {
-                    const randomIndex = unrevealedIndices[Math.floor(Math.random() * unrevealedIndices.length)];
-                    revealedLetters.push(randomIndex);
-                } else {
-                    // All letters are already revealed
-                    showFeedback('All letters are already revealed!', 'warning');
-                    return;
-                }
-            }
+            sortedPlayers.forEach((player, index) => {
+                resultText += `${index + 1}. ${player.name}: ${player.score} points\n`;
+            });
             
-            // Create a hint string with underscores for unrevealed letters
-            let hint = '';
-            for (let i = 0; i < word.length; i++) {
-                if (revealedLetters.includes(i)) {
-                    hint += word[i].toUpperCase() + ' ';
-                } else {
-                    hint += '_ ';
-                }
-            }
-            
-            // Remove trailing space
-            hint = hint.trim();
-            
-            showFeedback('Hint: ' + hint, 'warning');
-            
-            // Deduct points for using a hint
-            scoreWGC = Math.max(0, scoreWGC - 2);
-            updateStats();
-        }
-        
-        // Function to update the stats display
-        function updateStats() {
-            scoreWgcEl.textContent = scoreWGC;
-            streakEl.textContent = streak;
+            // Copy to clipboard
+            navigator.clipboard.writeText(resultText).then(() => {
+                alert('Results copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                alert('Failed to copy results to clipboard.');
+            });
         }
         
         // Function to open settings
         function openSettings() {
-            alert('Settings would open here. In a full implementation, this would allow changing game options.');
+            // Set current values in settings modal
+            timerDurationSlider.value = gameSettings.timerDuration;
+            timerDurationValue.textContent = gameSettings.timerDuration + ' seconds';
+            
+            wordsCountSlider.value = gameSettings.wordsCount;
+            wordsCountValue.textContent = gameSettings.wordsCount + (gameSettings.wordsCount == 1 ? ' word' : ' words');
+            
+            // Update player list in settings
+            updateSettingsPlayerList();
+            
+            settingsModal.style.display = 'flex';
+        }
+        
+        // Function to close settings
+        function closeSettings() {
+            settingsModal.style.display = 'none';
+        }
+        
+        // Function to save settings
+        function saveSettings() {
+            gameSettings.timerDuration = parseInt(timerDurationSlider.value);
+            gameSettings.wordsCount = parseInt(wordsCountSlider.value);
+            
+            // Update the words count label if game is active
+            if (gameStarted) {
+                updateWordsCountLabel();
+            }
+            
+            closeSettings();
+            alert('Settings saved successfully!');
+        }
+        
+        // Function to add a new player from settings
+        function addNewPlayerFromSettings() {
+            const name = prompt("Enter player name:");
+            if (name && name.trim() !== '') {
+                players.push({
+                    name: name.trim(),
+                    score: 0
+                });
+                updatePlayerList();
+                updateScoreboard();
+            }
         }
         
         // Function to reset the game
@@ -1125,11 +1711,21 @@
             // Stop any active timers
             if (timerWGC) {
                 clearInterval(timerWGC);
-                timerWGC = null;
             }
             
             // Reset game state
             gameActiveWGC = false;
+            currentRound = 1;
+            roundCounterEl.textContent = `Round: ${currentRound}`;
+            roundDisplayEl.textContent = `Round: ${currentRound}`;
+            
+            // Reset player scores
+            players.forEach(player => {
+                player.score = 0;
+            });
+            
+            // Update scoreboard
+            updateScoreboard();
             
             // Reinitialize the game
             initWordGuessChallenge();
