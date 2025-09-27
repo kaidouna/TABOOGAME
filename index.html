@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TaboGame - Enhanced with Difficulty Levels</title>
+    <title>TaboGame - Enhanced Interface</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -78,6 +78,11 @@
         .setup-screen {
             padding: 30px;
             text-align: center;
+            display: none;
+        }
+        
+        .setup-screen.active {
+            display: block;
         }
         
         .setup-screen h2 {
@@ -148,6 +153,11 @@
         
         .btn-danger {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #0ba360 0%, #3cba92 100%);
             color: white;
         }
         
@@ -763,6 +773,24 @@
             display: none !important;
         }
         
+        /* New styles for setup screens */
+        .setup-screen {
+            display: none;
+        }
+        
+        .setup-screen.active {
+            display: block;
+        }
+        
+        .warning-message {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            color: #856404;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            display: none;
+        }
+        
         /* Responsive styles */
         @media (max-width: 1024px) {
             .words-container {
@@ -922,41 +950,46 @@
             <p>Multiplayer Word Game</p>
         </header>
         
-        <!-- Player Name Screen -->
-        <div class="setup-screen" id="name-screen">
-            <h2>Game Setup</h2>
+        <!-- Name Entry Screen -->
+        <div class="setup-screen active" id="name-screen">
+            <h2>Enter Your Name</h2>
             
             <div class="input-group">
-                <label>Game Instructions</label>
-                <div style="text-align: left; background: #f5f7fa; padding: 20px; border-radius: 12px; margin: 15px 0;">
-                    <p><strong>How to play:</strong></p>
-                    <ol style="margin-left: 20px; margin-top: 10px;">
-                        <li>Add players using the "New Player" button</li>
-                        <li>Click "Continue" to start the game</li>
-                        <li>As the describer, you'll see words to describe to other players</li>
-                        <li>Use the dropdown menus to award points to players who guess correctly</li>
-                        <li>The scoreboard at the bottom will update in real time</li>
-                        <li>Use "Copy to FFT" to copy the results</li>
-                    </ol>
-                </div>
-            </div>
-            
-            <div class="input-group">
-                <label for="player-name">Describer Name</label>
-                <input type="text" id="player-name" placeholder="Your name" maxlength="15">
+                <label for="player-name">Your Name (as Describer)</label>
+                <input type="text" id="player-name" placeholder="Enter your name" maxlength="15">
             </div>
             
             <div>
-                <button class="btn btn-primary" onclick="submitName()">Continue</button>
-                <button class="btn btn-secondary" onclick="showPlayerListbox()">New Player(s)</button>
+                <button class="btn btn-primary" onclick="submitName()">Next: Add Teammates</button>
+            </div>
+        </div>
+        
+        <!-- Teammates Screen -->
+        <div class="setup-screen" id="teammates-screen">
+            <h2>Add Your Teammates</h2>
+            
+            <div class="warning-message" id="teammates-warning">
+                <i class="fas fa-exclamation-triangle"></i> You need to add at least one teammate to continue.
+            </div>
+            
+            <div class="input-group">
+                <label>Add Teammates</label>
+                <button class="btn btn-secondary" onclick="showPlayerListbox()" style="width: 100%; max-width: 400px;">
+                    <i class="fas fa-plus"></i> Add Teammate(s)
+                </button>
             </div>
             
             <div class="player-list" id="player-list">
                 <div class="player-item" style="font-weight: bold;">
-                    <span>Player Name</span>
-                    <span>Score</span>
+                    <span>Teammate Name</span>
+                    <span>Action</span>
                 </div>
                 <!-- Players will be added here dynamically -->
+            </div>
+            
+            <div>
+                <button class="btn btn-primary" onclick="submitTeammates()">Continue</button>
+                <button class="btn btn-success" onclick="playAlone()">Play Alone</button>
             </div>
         </div>
         
@@ -966,6 +999,9 @@
                 <span id="player-info">Player Name</span>
                 <div>
                     <span id="round-counter" style="margin-right: 15px;">Round: 1</span>
+                    <button class="btn btn-success" onclick="showPlayerListbox()" style="margin-right: 10px;">
+                        <i class="fas fa-plus"></i> Add Players
+                    </button>
                     <button class="btn btn-danger" onclick="resetGame()">Reset Game</button>
                 </div>
             </div>
@@ -1135,18 +1171,18 @@
     <div class="settings-modal" id="player-modal">
         <div class="settings-content">
             <div class="settings-header">
-                <h2>Add Players</h2>
+                <h2>Add Teammates</h2>
                 <div class="close-settings" onclick="closePlayerModal()">
                     <i class="fas fa-times"></i>
                 </div>
             </div>
             
             <div class="setting-item">
-                <label for="player-listbox">Enter player names (one per line):</label>
-                <textarea class="player-listbox" id="player-listbox" placeholder="Enter player names, one per line"></textarea>
+                <label for="player-listbox">Enter teammate names (one per line):</label>
+                <textarea class="player-listbox" id="player-listbox" placeholder="Enter teammate names, one per line"></textarea>
             </div>
             
-            <button class="save-settings" onclick="addPlayersFromListbox()">Add Players</button>
+            <button class="save-settings" onclick="addPlayersFromListbox()">Add Teammates</button>
         </div>
     </div>
     
@@ -1183,6 +1219,7 @@
         
         // Default word list with difficulty levels
         const defaultWords = [
+ 
             { word: "GO", definition:  " ", level: "easy" },
             { word: "OF", definition:  " ", level: "easy" },
             { word: "OH", definition:  " ", level: "easy" },
@@ -7096,6 +7133,7 @@
         
         // DOM elements
         const nameScreen = document.getElementById('name-screen');
+        const teammatesScreen = document.getElementById('teammates-screen');
         const gameScreen = document.getElementById('game-screen');
         const playerNameInput = document.getElementById('player-name');
         const playerInfoEl = document.getElementById('player-info');
@@ -7103,6 +7141,7 @@
         const scoreboardEl = document.getElementById('scoreboard');
         const roundCounterEl = document.getElementById('round-counter');
         const roundDisplayEl = document.getElementById('round-display');
+        const teammatesWarning = document.getElementById('teammates-warning');
         
         // Word Guess Challenge DOM elements
         const definitionEl = document.getElementById('definition');
@@ -7132,8 +7171,8 @@
         
         // Initialize the game when the page loads
         window.onload = function() {
-            // Show the name screen
-            nameScreen.style.display = 'block';
+            // Show the name screen by default
+            nameScreen.classList.add('active');
             
             // Update player list (empty initially)
             updatePlayerList();
@@ -7141,7 +7180,7 @@
             // Set up keyboard shortcuts
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
-                    if (nameScreen.style.display !== 'none') {
+                    if (nameScreen.classList.contains('active')) {
                         submitName();
                     }
                 }
@@ -7165,6 +7204,41 @@
             // Initialize the standalone timer value display
             updateStandaloneTimerValue();
         };
+        
+        // Function to show the name screen
+        function showNameScreen() {
+            hideAllScreens();
+            nameScreen.classList.add('active');
+            playerNameInput.focus();
+        }
+        
+        // Function to show the teammates screen
+        function showTeammatesScreen() {
+            hideAllScreens();
+            teammatesScreen.classList.add('active');
+            
+            // Hide warning initially
+            teammatesWarning.style.display = 'none';
+        }
+        
+        // Function to show the game screen
+        function showGameScreen() {
+            hideAllScreens();
+            gameScreen.style.display = 'block';
+            
+            // Update the scoreboard
+            updateScoreboard();
+            
+            // Initialize the Word Guess Challenge game
+            initWordGuessChallenge();
+        }
+        
+        // Function to hide all screens
+        function hideAllScreens() {
+            nameScreen.classList.remove('active');
+            teammatesScreen.classList.remove('active');
+            gameScreen.style.display = 'none';
+        }
         
         // Function to set difficulty level
         function setDifficulty(level) {
@@ -7225,6 +7299,14 @@
             if (added > 0) {
                 updatePlayerList();
                 closePlayerModal();
+                
+                // Hide warning if players were added
+                teammatesWarning.style.display = 'none';
+                
+                // Update scoreboard if we're already in the game
+                if (gameScreen.style.display === 'block') {
+                    updateScoreboard();
+                }
             } else {
                 alert('No valid new players to add.');
             }
@@ -7234,19 +7316,21 @@
         function updatePlayerList() {
             playerListEl.innerHTML = `
                 <div class="player-item" style="font-weight: bold;">
-                    <span>Player Name</span>
-                    <span>Score</span>
+                    <span>Teammate Name</span>
+                    <span>Action</span>
                 </div>
             `;
             
-            players.forEach((player, index) => {
+            // Show only teammates (not the describer)
+            const teammates = players.filter(player => !player.isDescriber);
+            
+            teammates.forEach((player, index) => {
                 const playerEl = document.createElement('div');
                 playerEl.className = 'player-item';
                 playerEl.innerHTML = `
                     <span class="player-name">${player.name}</span>
-                    <span>${player.score}</span>
                     <span class="remove-player" onclick="removePlayer(${index})">
-                        <i class="fas fa-times"></i>
+                        <i class="fas fa-times"></i> Remove
                     </span>
                 `;
                 playerListEl.appendChild(playerEl);
@@ -7280,8 +7364,19 @@
         
         // Function to remove a player
         function removePlayer(index) {
-            players.splice(index, 1);
-            updatePlayerList();
+            // Find the actual index in the players array
+            const teammate = players.filter(p => !p.isDescriber)[index];
+            const actualIndex = players.findIndex(p => p.name === teammate.name);
+            
+            if (actualIndex !== -1) {
+                players.splice(actualIndex, 1);
+                updatePlayerList();
+                
+                // Show warning if no teammates left
+                if (players.filter(p => !p.isDescriber).length === 0) {
+                    teammatesWarning.style.display = 'block';
+                }
+            }
         }
         
         // Function to remove a player from settings
@@ -7319,11 +7414,11 @@
             }
             
             // Add the describer as a player
-            players.push({
+            players = [{
                 name: playerName,
                 score: 0,
                 isDescriber: true
-            });
+            }];
             
             // Clear the name input field
             playerNameInput.value = '';
@@ -7331,15 +7426,26 @@
             // Update player info
             playerInfoEl.textContent = playerName;
             
-            // Hide the name screen and show the game screen
-            nameScreen.style.display = 'none';
-            gameScreen.style.display = 'block';
+            // Show the teammates screen
+            showTeammatesScreen();
+        }
+        
+        // Function to submit teammates and start the game
+        function submitTeammates() {
+            // Check if there's at least one teammate
+            if (players.filter(p => !p.isDescriber).length === 0) {
+                teammatesWarning.style.display = 'block';
+                return;
+            }
             
-            // Update the scoreboard
-            updateScoreboard();
-            
-            // Initialize the Word Guess Challenge game
-            initWordGuessChallenge();
+            // Show the game screen
+            showGameScreen();
+        }
+        
+        // Function to play alone (without teammates)
+        function playAlone() {
+            // Show the game screen
+            showGameScreen();
         }
         
         // Function to initialize the Word Guess Challenge game
