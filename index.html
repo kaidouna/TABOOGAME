@@ -972,13 +972,6 @@
                 <i class="fas fa-exclamation-triangle"></i> You need to add at least one teammate to continue.
             </div>
             
-            <div class="input-group">
-                <label>Add Teammates</label>
-                <button class="btn btn-secondary" onclick="showPlayerListbox()" style="width: 100%; max-width: 400px;">
-                    <i class="fas fa-plus"></i> Add Teammate(s)
-                </button>
-            </div>
-            
             <div class="player-list" id="player-list">
                 <div class="player-item" style="font-weight: bold;">
                     <span>Teammate Name</span>
@@ -990,6 +983,9 @@
             <div>
                 <button class="btn btn-primary" onclick="submitTeammates()">Continue</button>
                 <button class="btn btn-success" onclick="playAlone()">Play Alone</button>
+                <button class="btn btn-secondary" onclick="showPlayerListbox()">
+                    <i class="fas fa-plus"></i> Add More Teammates
+                </button>
             </div>
         </div>
         
@@ -1182,7 +1178,10 @@
                 <textarea class="player-listbox" id="player-listbox" placeholder="Enter teammate names, one per line"></textarea>
             </div>
             
-            <button class="save-settings" onclick="addPlayersFromListbox()">Add Teammates</button>
+            <div>
+                <button class="btn btn-primary" onclick="addPlayersFromListbox()">Add Teammates</button>
+                <button class="btn btn-success" onclick="playAlone()">Play Alone</button>
+            </div>
         </div>
     </div>
     
@@ -7127,7 +7126,7 @@
             { word: "OPHTHALMOLOGIST", definition: " ", level: "insane" },
             { word: "PALAEONTOLOGIST", definition: " ", level: "insane" },
             { word: "EXTRATERRESTRIAL", definition: " ", level: "insane" }
- 
+
 
         ];
         
@@ -7219,6 +7218,9 @@
             
             // Hide warning initially
             teammatesWarning.style.display = 'none';
+            
+            // Automatically show the player listbox modal
+            showPlayerListbox();
         }
         
         // Function to show the game screen
@@ -7303,10 +7305,8 @@
                 // Hide warning if players were added
                 teammatesWarning.style.display = 'none';
                 
-                // Update scoreboard if we're already in the game
-                if (gameScreen.style.display === 'block') {
-                    updateScoreboard();
-                }
+                // Automatically proceed to game screen after adding teammates
+                showGameScreen();
             } else {
                 alert('No valid new players to add.');
             }
