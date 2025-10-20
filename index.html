@@ -301,6 +301,8 @@
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: 15px;
             margin-top: 20px;
+            position: relative;
+            z-index: 1;
         }
         
         .word-item {
@@ -313,7 +315,7 @@
             font-weight: 600;
             color: #4a5568;
             position: relative;
-            overflow: hidden;
+            overflow: visible; /* Changed from hidden to visible */
             display: flex;
             flex-direction: column;
         }
@@ -324,7 +326,6 @@
         }
         
         .word-item.correct {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             color: white;
         }
         
@@ -335,18 +336,115 @@
         
         .word-text {
             margin-bottom: 10px;
-            font-size: 1.1rem;
+            font-size: 1.9rem;
         }
         
-        .word-dropdown {
-            width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #e2e8f0;
-            background: white;
-            color: #4a5568;
-            font-size: 0.9rem;
+        /* NEW: Player buttons container */
+        .player-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+            position: relative;
+        }
+        
+        /* NEW: Small colorful round buttons for players */
+        .player-button {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: none;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: white;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        
+        .player-button:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* FIXED: Tooltip positioned outside the grid container */
+        .player-button:hover::after {
+            content: attr(data-name);
+            position: fixed; /* Changed from absolute to fixed */
+            top: 0; /* Will be positioned dynamically via JS */
+            left: 0; /* Will be positioned dynamically via JS */
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 1.4rem;
+            white-space: nowrap;
+            z-index: 10000; /* Very high z-index */
+            font-weight: 700;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transform: translate(-50%, -100%); /* Center above the button */
+            pointer-events: none; /* Prevent tooltip from interfering with hover */
+        }
+        
+        .player-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .player-button:disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* NEW: Special black button for awarding all players */
+        .player-button.all-players {
+            background-color: #000;
+            color: white;
+            font-size: 0.8rem;
+        }
+
+
+
+               /* Make the black micro button bigger */
+               .player-button.all-players {
+                   width: 35px !important;
+                   height: 35px !important;
+                   font-size: 0; /* Remove any text */
+               }
+ 
+               
+               .word-item:hover::after {
+                   content: attr(data-tooltip);
+                   position: fixed;
+                   top: var(--tooltip-y, 0);
+                   left: var(--tooltip-x, 0);
+                   background: rgba(0, 0, 0, 0.9);
+                   color: white;
+                   padding: 12px 20px;
+                   border-radius: 8px;
+                   font-size: 1.1rem;
+                   white-space: nowrap;
+                   z-index: 10000;
+                   font-weight: 700;
+                   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+                   text-transform: uppercase;
+                   letter-spacing: 0.5px;
+                   transform: translate(-50%, -100%);
+                   pointer-events: none;
+               }
+
+
+
+        
+        .player-button.awarded {
+            box-shadow: 0 0 0 2px white, 0 0 0 4px currentColor;
         }
         
         .wgc-input-section {
@@ -828,9 +926,10 @@
                 font-size: 1rem;
             }
             
-            .word-dropdown {
-                padding: 8px;
-                font-size: 0.85rem;
+            .player-button {
+                width: 25px;
+                height: 25px;
+                font-size: 0.6rem;
             }
             
             .game-header {
@@ -899,6 +998,12 @@
             
             .word-text {
                 font-size: 0.9rem;
+            }
+            
+            .player-button {
+                width: 22px;
+                height: 22px;
+                font-size: 0.55rem;
             }
             
             .wgc-definition-text {
@@ -1205,6 +1310,15 @@
         let gameActiveWGC = false;
         let gameStarted = false;
         
+        // Track awarded words for undo functionality
+        let awardedWords = {};
+        
+        // Player colors array
+        const playerColors = [
+            '#FF5252', '#FF9800', '#FFEB3B', '#4CAF50', 
+            '#2196F3', '#9C27B0', '#E91E63', '#00BCD4'
+        ];
+        
         // Standalone timer state
         let standaloneTimerDuration = 60;
         let standaloneTimeLeft = 0;
@@ -1218,6 +1332,7 @@
         
         // Default word list with difficulty levels
         const defaultWords = [
+
  
             { word: "GO", definition:  " ", level: "easy" },
             { word: "OF", definition:  " ", level: "easy" },
@@ -7127,7 +7242,6 @@
             { word: "PALAEONTOLOGIST", definition: " ", level: "insane" },
             { word: "EXTRATERRESTRIAL", definition: " ", level: "insane" }
 
-
         ];
         
         // DOM elements
@@ -7202,7 +7316,22 @@
             
             // Initialize the standalone timer value display
             updateStandaloneTimerValue();
+            
+            // Add event listeners for tooltip positioning
+            setupTooltipPositioning();
         };
+        
+        // Function to set up tooltip positioning
+        function setupTooltipPositioning() {
+            // Add mouse move listener to position tooltips
+            document.addEventListener('mousemove', function(e) {
+                const tooltip = document.querySelector('.player-button:hover::after');
+                if (tooltip) {
+                    // Tooltip positioning is now handled by CSS with fixed positioning
+                    // and transform to center above the cursor
+                }
+            });
+        }
         
         // Function to show the name screen
         function showNameScreen() {
@@ -7456,6 +7585,7 @@
             
             usedIndices = [];
             gameStarted = false;
+            awardedWords = {};
             
             // Show the file load section
             fileLoadSection.style.display = 'block';
@@ -7529,7 +7659,7 @@
             startTimer();
         }
         
-        // Function to display words in the container
+        // Function to display words in the container - MODIFIED to use player buttons with numbers
         function displayWords(words) {
             wordsContainerEl.innerHTML = '';
             
@@ -7543,63 +7673,88 @@
                 wordText.className = 'word-text';
                 wordText.textContent = wordData.word;
                 
-                // Create dropdown for players
-                const dropdown = document.createElement('select');
-                dropdown.className = 'word-dropdown';
+                // Create player buttons container
+                const playerButtons = document.createElement('div');
+                playerButtons.className = 'player-buttons';
                 
-                // Add default option
-                const defaultOption = document.createElement('option');
-                defaultOption.value = '';
-                defaultOption.textContent = 'Select player';
-                defaultOption.disabled = true;
-                defaultOption.selected = true;
-                dropdown.appendChild(defaultOption);
-                
-                // Add players to dropdown (excluding the describer)
-                players.forEach(player => {
-                    if (!player.isDescriber) {
-                        const option = document.createElement('option');
-                        option.value = player.name;
-                        option.textContent = player.name;
-                        dropdown.appendChild(option);
+                // Add buttons for each player (excluding the describer)
+                const teammates = players.filter(player => !player.isDescriber);
+                teammates.forEach((player, playerIndex) => {
+                    const playerButton = document.createElement('button');
+                    playerButton.className = 'player-button';
+                    playerButton.setAttribute('data-name', player.name);
+                    playerButton.setAttribute('data-player-index', playerIndex);
+                    playerButton.setAttribute('data-color', playerColors[playerIndex % playerColors.length]);
+                    
+                    // Set button background color based on player index
+                    playerButton.style.backgroundColor = playerColors[playerIndex % playerColors.length];
+                    
+                    // Set button text to player number (starting from 1)
+                    playerButton.textContent = playerIndex + 1;
+                    
+                    // Check if this word is already awarded to this player
+                    const wordKey = `${index}-${wordData.word}`;
+                    if (awardedWords[wordKey] && awardedWords[wordKey].includes(player.name)) {
+                        playerButton.classList.add('awarded');
                     }
+                    
+                    // Add event listener to toggle points when clicked
+                    playerButton.addEventListener('click', function() {
+                        toggleAward(player.name, wordData, index, playerIndex);
+                    });
+                    
+                    playerButtons.appendChild(playerButton);
                 });
                 
-                // Add event listener to dropdown
-                dropdown.addEventListener('change', function() {
-                    if (this.value) {
-                        awardPoints(this.value, wordData, index);
-                        this.disabled = true;
-                    }
+                // Add special black button for awarding all players
+                const allButton = document.createElement('button');
+                allButton.className = 'player-button all-players';
+                allButton.setAttribute('data-name', 'All Players');
+                // Remove the text content to not name it
+                allButton.textContent = ''; 
+                // Make it bigger by adding a specific class
+                allButton.style.width = '35px';
+                allButton.style.height = '35px';
+                
+                // Check if this word is already awarded to all players
+                const wordKey = `${index}-${wordData.word}`;
+                if (awardedWords[wordKey] && awardedWords[wordKey].includes('ALL')) {
+                    allButton.classList.add('awarded');
+                }
+                
+                // Add event listener to award all players when clicked
+                allButton.addEventListener('click', function() {
+                    awardAllPlayers(wordData, index);
                 });
+                
+                playerButtons.appendChild(allButton);
                 
                 // Add elements to word item
                 wordEl.appendChild(wordText);
-                wordEl.appendChild(dropdown);
+                wordEl.appendChild(playerButtons);
                 
                 wordsContainerEl.appendChild(wordEl);
             });
         }
+ 
         
-        // Function to award points to a player
-        function awardPoints(playerName, wordData, wordIndex) {
+        // Function to toggle points for a player (award or undo)
+        function toggleAward(playerName, wordData, wordIndex, playerIndex) {
             if (!gameActiveWGC) return;
             
             // Find the player
             const player = players.find(p => p.name === playerName);
             if (!player) return;
             
-            // Stop the timer if all words are completed
-            const allWordsGuessed = Array.from(wordsContainerEl.children).every(wordEl => 
-                wordEl.querySelector('select').disabled
-            );
+            const wordKey = `${wordIndex}-${wordData.word}`;
+            const wordEl = document.querySelector(`.word-item[data-index="${wordIndex}"]`);
+            const playerButton = wordEl.querySelector(`.player-button[data-player-index="${playerIndex}"]`);
             
-            if (allWordsGuessed) {
-                clearInterval(timerWGC);
-                gameActiveWGC = false;
-                
-                // Hide the words after all are guessed
-                hideWords();
+            // Check if the word is already awarded to this player
+            if (awardedWords[wordKey] && awardedWords[wordKey].includes(playerName)) {
+                // Undo the award
+                undoAward(playerName, wordData, wordIndex, playerIndex);
+                return;
             }
             
             // Fixed 7 points per word
@@ -7608,8 +7763,18 @@
             // Award points to the player
             player.score += points;
             
-            // Mark the word as completed
-            const wordEl = document.querySelector(`.word-item[data-index="${wordIndex}"]`);
+            // Track the awarded word
+            if (!awardedWords[wordKey]) {
+                awardedWords[wordKey] = [];
+            }
+            awardedWords[wordKey].push(playerName);
+            
+            // Mark the button as awarded
+            playerButton.classList.add('awarded');
+            
+            // Change word container color to match player button color
+            const playerColor = playerButton.getAttribute('data-color');
+            wordEl.style.background = playerColor;
             wordEl.classList.add('correct');
             
             // Update scoreboard
@@ -7618,8 +7783,157 @@
             // Show feedback
             showFeedback(`${player.name} guessed "${wordData.word}"! +${points} points`, 'success');
             
-            // Check if all words have been guessed
-            if (allWordsGuessed) {
+            // Check if all words have been awarded
+            checkAllWordsAwarded();
+        }
+        
+        // Function to undo an award
+        function undoAward(playerName, wordData, wordIndex, playerIndex) {
+            // Find the player
+            const player = players.find(p => p.name === playerName);
+            if (!player) return;
+            
+            const wordKey = `${wordIndex}-${wordData.word}`;
+            const wordEl = document.querySelector(`.word-item[data-index="${wordIndex}"]`);
+            const playerButton = wordEl.querySelector(`.player-button[data-player-index="${playerIndex}"]`);
+            
+            // Remove points from the player
+            const points = 7;
+            player.score -= points;
+            
+            // Remove from awarded words tracking
+            if (awardedWords[wordKey]) {
+                const index = awardedWords[wordKey].indexOf(playerName);
+                if (index > -1) {
+                    awardedWords[wordKey].splice(index, 1);
+                }
+                
+                // If no more awards for this word, remove the key
+                if (awardedWords[wordKey].length === 0) {
+                    delete awardedWords[wordKey];
+                }
+            }
+            
+            // Remove the awarded class from the button
+            playerButton.classList.remove('awarded');
+            
+            // Reset word background to white
+            wordEl.style.background = 'white';
+            wordEl.classList.remove('correct');
+            
+            // Update scoreboard
+            updateScoreboard();
+            
+            // Show feedback
+            showFeedback(`Undid award for ${player.name} on "${wordData.word}"! -${points} points`, 'warning');
+            
+            // Hide the copy button if not all words are awarded
+            checkAllWordsAwarded();
+        }
+        
+        // Function to award points to all players
+        function awardAllPlayers(wordData, wordIndex) {
+            if (!gameActiveWGC) return;
+            
+            const wordKey = `${wordIndex}-${wordData.word}`;
+            const wordEl = document.querySelector(`.word-item[data-index="${wordIndex}"]`);
+            const allButton = wordEl.querySelector('.player-button.all-players');
+            
+            // Check if the word is already awarded to all players
+            if (awardedWords[wordKey] && awardedWords[wordKey].includes('ALL')) {
+                // Undo the all award
+                undoAllAward(wordData, wordIndex);
+                return;
+            }
+            
+            // Fixed 7 points per word per player
+            const points = 7;
+            const teammates = players.filter(player => !player.isDescriber);
+            
+            // Award points to all players
+            teammates.forEach(player => {
+                player.score += points;
+            });
+            
+            // Mark all player buttons as awarded
+            const playerButtons = wordEl.querySelectorAll('.player-button:not(.all-players)');
+            playerButtons.forEach(button => {
+                button.classList.add('awarded');
+            });
+            
+            // Track the awarded word for all players
+            awardedWords[wordKey] = ['ALL'];
+            
+            // Mark the all button as awarded
+            allButton.classList.add('awarded');
+            
+            // Change word container color to black for all players
+            wordEl.style.background = '#000';
+            wordEl.classList.add('correct');
+            
+            // Update scoreboard
+            updateScoreboard();
+            
+            // Show feedback
+            showFeedback(`All players guessed "${wordData.word}"! +${points} points each`, 'success');
+            
+            // Check if all words have been awarded
+            checkAllWordsAwarded();
+        }
+        
+        // Function to undo an all award
+        function undoAllAward(wordData, wordIndex) {
+            const wordKey = `${wordIndex}-${wordData.word}`;
+            const wordEl = document.querySelector(`.word-item[data-index="${wordIndex}"]`);
+            const allButton = wordEl.querySelector('.player-button.all-players');
+            const teammates = players.filter(player => !player.isDescriber);
+            
+            // Remove points from all players
+            const points = 7;
+            teammates.forEach(player => {
+                player.score -= points;
+            });
+            
+            // Remove all awarded classes from player buttons
+            const playerButtons = wordEl.querySelectorAll('.player-button:not(.all-players)');
+            playerButtons.forEach(button => {
+                button.classList.remove('awarded');
+            });
+            
+            // Remove from awarded words tracking
+            delete awardedWords[wordKey];
+            
+            // Remove the awarded class from the all button
+            allButton.classList.remove('awarded');
+            
+            // Reset word background to white
+            wordEl.style.background = 'white';
+            wordEl.classList.remove('correct');
+            
+            // Update scoreboard
+            updateScoreboard();
+            
+            // Show feedback
+            showFeedback(`Undid all awards for "${wordData.word}"! -${points} points each`, 'warning');
+            
+            // Hide the copy button if not all words are awarded
+            checkAllWordsAwarded();
+        }
+        
+        // Function to check if all words have been awarded
+        function checkAllWordsAwarded() {
+            const allWordsAwarded = currentWords.every((word, index) => {
+                const wordKey = `${index}-${word.word}`;
+                return awardedWords[wordKey] && awardedWords[wordKey].length > 0;
+            });
+            
+            if (allWordsAwarded) {
+                clearInterval(timerWGC);
+                gameActiveWGC = false;
+                
+                // Hide the words after all are awarded
+                hideWords();
+                
                 // Show the copy button
                 document.getElementById('copy-btn').style.display = 'block';
             }
@@ -7637,7 +7951,10 @@
             Array.from(wordsContainerEl.children).forEach(wordEl => {
                 if (!wordEl.classList.contains('correct')) {
                     wordEl.classList.add('skipped');
-                    wordEl.querySelector('select').disabled = true;
+                    const buttons = wordEl.querySelectorAll('.player-button');
+                    buttons.forEach(btn => {
+                        btn.disabled = true;
+                    });
                 }
             });
             
@@ -7718,11 +8035,15 @@
                     clearInterval(timerWGC);
                     gameActiveWGC = false;
                     
-                    // Mark all unguessed words as skipped
-                    Array.from(wordsContainerEl.children).forEach(wordEl => {
-                        if (!wordEl.classList.contains('correct')) {
+                    // Mark all unawarded words as skipped
+                    Array.from(wordsContainerEl.children).forEach((wordEl, index) => {
+                        const wordKey = `${index}-${currentWords[index].word}`;
+                        if (!awardedWords[wordKey] || awardedWords[wordKey].length === 0) {
                             wordEl.classList.add('skipped');
-                            wordEl.querySelector('select').disabled = true;
+                            const buttons = wordEl.querySelectorAll('.player-button');
+                            buttons.forEach(btn => {
+                                btn.disabled = true;
+                            });
                         }
                     });
                     
@@ -7861,6 +8182,9 @@
             players.forEach(player => {
                 player.score = 0;
             });
+            
+            // Reset awarded words
+            awardedWords = {};
             
             // Update scoreboard
             updateScoreboard();
